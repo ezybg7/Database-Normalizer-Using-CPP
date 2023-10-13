@@ -1,7 +1,9 @@
 #include "nf5.h"
 
-void main(){
+int main(){
 
     cout << "Hello World" << endl;
-    cout << "Goodbye World";
+    cout << "Goodbye World" << endl;
+
+    return 0;
 }
