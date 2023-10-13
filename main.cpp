@@ -1,6 +1,4 @@
-#include <iostream>
-
-using namespace std;
+#include "nf5.h"
 
 void main(){
 
