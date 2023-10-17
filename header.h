@@ -1,11 +1,14 @@
 #ifndef HEADER_H
 #define HEADER_H
 
+#include "nf5.h"
+#include <unordered_map>
 #include <iomanip>
 #include <sstream>
 #include <fstream>
 #include <string>
 #include <vector>
+
 
 vector<string> getAttributes(string file)
 {
@@ -35,8 +38,8 @@ int getTupleAmount(string file)
   fin.close();
   return --count;
 }
-
-vector<vector<string>> returnTuples(string file)
+//unordered_map<vector<string>>
+vector<vector<string>> returnTuples(const string file)
 {
   string line = "";
   
@@ -54,15 +57,31 @@ vector<vector<string>> returnTuples(string file)
       row.push_back(move(value));
     tuples.push_back(move(row));
   }
-  
+  /*
   for(const vector<string>& row : tuples) 
   {
     for(const string& value : row)
       cout << setw(15) << value;
     cout << "\n";
-  }
+  }*/
   fin.close();
   return tuples;
+}
+
+unordered_map<string, vector<string>> mapReturn(vector<vector<string>> tuples, vector<string> attributes)
+{
+  unordered_map<string, vector<string>> resultMap;
+
+  for(int i = 0; i < attributes.size(); i++)
+  {
+    string key = attributes[i];
+    for(int j = 0; j < tuples.size(); j++)
+    {
+      resultMap[key].push_back(tuples[j][i]);
+      //cout << resultMap[key].back() << endl;
+    }
+  }
+  return resultMap;
 }
 
 #endif
