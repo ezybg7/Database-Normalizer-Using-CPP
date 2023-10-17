@@ -2,6 +2,10 @@
 #define NF1_H
 
 #include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <sstream>
 
 using namespace std;
 
