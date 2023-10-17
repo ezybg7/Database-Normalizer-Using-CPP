@@ -7,6 +7,16 @@
 #include <unordered_set>
 #include <sstream>
 
+vector<string> splitString(const string& input, char delimiter) {
+    vector<string> tokens;
+    stringstream ss(input);
+    string token;
+    while (getline(ss, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
 vector<string> convertTo2NF(const vector<string>& dataset) {
     //Convert the dataset to 1NF first
     vector<string> datasetIn1NF = convertTo1NF(dataset);

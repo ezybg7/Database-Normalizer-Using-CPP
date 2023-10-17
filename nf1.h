@@ -9,6 +9,16 @@
 
 using namespace std;
 
+vector<string> splitString(const string& input, char delimiter) {
+    vector<string> tokens;
+    stringstream ss(input);
+    string token;
+    while (getline(ss, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
 vector<string> convertTo1NF(const vector<string>& dataset) {
     unordered_map<string, vector<string>> resultMap;
 
