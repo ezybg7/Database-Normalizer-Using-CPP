@@ -3,42 +3,34 @@
 
 #include "header.h"
 
-vector<string> convertTo2NF(const vector<string>& dataset) {
-    //Convert the dataset to 1NF first
-    vector<string, vector<string>> datasetIn1NF = convertTo1NF(dataset);
+vector<string> convertTo2NF(const vector<string>& dataset, const vector<pair<unordered_set<string>, unordered_set<string>>>& functionalDependencies) {
+    vector<string> result;
 
+    // Create a map for storing table rows based on the key
     unordered_map<string, vector<string>> resultMap;
 
-    //Iterate through the 1NF dataset and organize data based on keys
-    for (const auto& row : datasetIn1NF) {
-        vector<string> values = splitString(row, ',');
-
-        //Use the first column as the key (superkey) for organizing data
-        string key = values[0];
-        if (resultMap.find(key) == resultMap.end()) {
-            resultMap[key] = values;
-        } else {
-            //Merge rows with the same key by concatenating values
-            for (size_t i = 1; i < values.size(); ++i) {
-                resultMap[key].push_back(values[i]);
+    // Iterate through the dataset and organize data based on keys
+    for (const auto& row : dataset) {
+        // Extract key attributes based on functional dependencies
+        string key;
+        for (const auto& fd : functionalDependencies) {
+            if (includes(fd.first.begin(), fd.first.end(), values.begin(), values.end())) {
+                key = accumulate(fd.first.begin(), fd.first.end(), key, [](string& k, const string& v) { return k.empty() ? v : k + "," + v; });
+                break;
             }
         }
+
+        // Add the row to the corresponding key in the resultMap
+        resultMap[key].push_back(accumulate(fd.second.begin(), fd.second.end(), "", [&](string& s, const string& v) { return s.empty() ? values[v] : s + "," + values[v]; }));
     }
 
-    //Convert the map back to vector for 2NF representation
-    vector<string> result;
+    // Construct result by combining rows with the same keys
     for (const auto& pair : resultMap) {
-        stringstream rowStream;
-        for (const auto& value : pair.second) {
-            rowStream << value << ",";
+        for (const auto& row : pair.second) {
+            result.push_back(pair.first + "," + row);
         }
-        string row = rowStream.str();
-        //Remove the trailing comma
-        row.pop_back();
-        result.push_back(row);
     }
 
     return result;
 }
-
 #endif
