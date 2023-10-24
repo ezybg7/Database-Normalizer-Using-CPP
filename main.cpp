@@ -4,6 +4,7 @@
 //#include "bcnf.h"
 //#include "nf4.h"
 //#include "nf5.h"
+#include "output.h"
 
 int main(){
   const string file = "exampleInputTable.csv";
@@ -30,10 +31,18 @@ int main(){
   int numTuples = getTupleAmount(file);
   vector<string> attributes = getAttributes(file);
   vector<vector<string>> tuples = returnTuples(file);
-  vector<string> keys;
+  vector<string> keys; //fixme : add keys input
+
+
   unordered_map<string, vector<string>> tupleMap = mapReturn(tuples, attributes);
 
-  print_map(tupleMap);
+  vector<string> result = convertTo1NF(tupleMap);
+
+  print_vector(result);
+
+  //print_map(convertTo1NF(tupleMap));
+
+
 
   return 0;
 }

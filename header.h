@@ -11,6 +11,17 @@
 #include <vector>
 
 using namespace std;
+//table struct so we can store each table
+struct Table {
+  string name;
+  vector<string> attributes;
+  vector<string> keys;
+  unordered_map<string, vector<string>> data;
+
+  //constructor 
+  Table(const string& tableName, const vector<string>& tableAttributes, const vector<string>& tableKeys)
+    : name(tableName), attributes(tableAttributes), keys(tableKeys) {}
+};
 
 vector<string> getAttributes(string file)
 {
@@ -59,17 +70,18 @@ vector<vector<string>> returnTuples(const string file)
       row.push_back(move(value));
     tuples.push_back(move(row));
   }
-  /*
+  
   for(const vector<string>& row : tuples) 
   {
     for(const string& value : row)
       cout << setw(15) << value;
     cout << "\n";
-  }*/
+  }
   fin.close();
   return tuples;
 }
 
+//creates unordered map using attributes and tuples, essentially creating each collumn. 
 unordered_map<string, vector<string>> mapReturn(vector<vector<string>> tuples, vector<string> attributes)
 {
   unordered_map<string, vector<string>> resultMap;
@@ -84,18 +96,6 @@ unordered_map<string, vector<string>> mapReturn(vector<vector<string>> tuples, v
     }
   }
   return resultMap;
-}
-
-//testing purposes, prints map parsed by the attributes
-void print_map (unordered_map<string, vector<string>> map){
-    for (const auto& pair : map) {
-      std::cout << "Key: " << pair.first << std::endl;
-      std::cout << "Values: ";
-      for (const auto& value : pair.second) {
-          std::cout << value << " ";
-      }
-      std::cout << std::endl;
-  }
 }
 
 #endif

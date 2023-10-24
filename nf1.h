@@ -3,14 +3,16 @@
 
 #include "header.h"
 
-vector<string> convertTo1NF(const unordered_map<string, vector<string>> resultMap) {
+vector<string> convertTo1NF(unordered_map<string, vector<string>> resultMap) {
     //Convert the map back to 1NF
     vector<string> result;
     for (const auto& pair : resultMap) {
         stringstream rowStream;
         for (const auto& value : pair.second) {
             rowStream << value << ",";
+            cout << value << ",";
         }
+        cout << endl;
         string row = rowStream.str();
         //Remove the trailing comma
         row.pop_back();
