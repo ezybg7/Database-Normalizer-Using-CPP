@@ -1,15 +1,11 @@
 #ifndef NF2_H
 #define NF2_H
 
-#include "nf1.h"
-#include <vector>
-#include <unordered_map>
-#include <unordered_set>
-#include <sstream>
+#include "header.h"
 
 vector<string> convertTo2NF(const vector<string>& dataset) {
     //Convert the dataset to 1NF first
-    vector<string> datasetIn1NF = convertTo1NF(dataset);
+    vector<string, vector<string>> datasetIn1NF = convertTo1NF(dataset);
 
     unordered_map<string, vector<string>> resultMap;
 

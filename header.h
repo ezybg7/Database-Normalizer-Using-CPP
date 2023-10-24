@@ -1,14 +1,16 @@
 #ifndef HEADER_H
 #define HEADER_H
 
-#include "nf5.h"
 #include <unordered_map>
+#include <unordered_set>
+#include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <fstream>
 #include <string>
 #include <vector>
 
+using namespace std;
 
 vector<string> getAttributes(string file)
 {
@@ -82,6 +84,18 @@ unordered_map<string, vector<string>> mapReturn(vector<vector<string>> tuples, v
     }
   }
   return resultMap;
+}
+
+//testing purposes, prints map parsed by the attributes
+void print_map (unordered_map<string, vector<string>> map){
+    for (const auto& pair : map) {
+      std::cout << "Key: " << pair.first << std::endl;
+      std::cout << "Values: ";
+      for (const auto& value : pair.second) {
+          std::cout << value << " ";
+      }
+      std::cout << std::endl;
+  }
 }
 
 #endif
