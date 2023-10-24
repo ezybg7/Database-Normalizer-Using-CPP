@@ -1,5 +1,9 @@
 #include "nf1.h"
 //#include "nf2.h"
+//#include "nf3.h"
+//#include "bcnf.h"
+//#include "nf4.h"
+//#include "nf5.h"
 
 int main(){
   const string file = "exampleInputTable.csv";
