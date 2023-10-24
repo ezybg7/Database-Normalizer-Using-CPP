@@ -2,6 +2,7 @@
 #define NF3_H
 
 #include "header.h"
+#include "output.h"
 
 vector<string> convertTo3NF(const vector<string>& dataset, const vector<pair<unordered_set<string>, unordered_set<string>>>& functionalDependencies) {
     vector<string> result;

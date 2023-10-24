@@ -2,6 +2,7 @@
 #define NF2_H
 
 #include "header.h"
+#include "output.h"
 
 vector<string> convertTo2NF(const vector<string>& dataset, const vector<pair<unordered_set<string>, unordered_set<string>>>& functionalDependencies) {
     vector<string> result;

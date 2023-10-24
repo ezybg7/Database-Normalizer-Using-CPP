@@ -2,7 +2,7 @@
 #define NF4_H
 
 #include "header.h"
-
+#include "output.h"
 
 
 #endif

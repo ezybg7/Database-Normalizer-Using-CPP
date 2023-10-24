@@ -2,6 +2,7 @@
 #define BCNF_H
 
 #include "header.h"
+#include "output.h"
 
 // Function to check if a set of attributes is a superkey
 bool isSuperkey(const unordered_set<string>& attributes, const vector<pair<unordered_set<string>, unordered_set<string>>>& functionalDependencies) {
