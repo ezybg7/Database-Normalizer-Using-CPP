@@ -26,7 +26,7 @@ int main(){
 
   // vector<string> result = convertTo1NF(tupleMap);
 
-  Table testTable = Table::parseCSV(file);
+  Table testTable = Table::parseCSV(file, fileFD);
 
 
   //print_vector(result);
