@@ -26,35 +26,48 @@ struct Table {
 
     //parser
     static Table parseCSV(const string& filename) {
-        ifstream file(filename);
-        string line;
-        getline(file, line);
+      
+      ifstream file(filename);
+      string line;
+      getline(file, line);
+
+      stringstream ss(line);
+      string attribute;
+      vector<string> attributes;
+
+      while (getline(ss, attribute, ',')) {
+          attributes.push_back(attribute);
+      }
+
+      Table table(attributes, {});
+
+      while (getline(file, line)) {
 
         stringstream ss(line);
-        string attribute;
-        vector<string> attributes;
-        while (getline(ss, attribute, ',')) {
-            attributes.push_back(attribute);
-        }
+        string value;
+        vector<string> dataRow;
+        int index = 0;
 
-        Table table(attributes, {});
-
-        while (getline(file, line)) {
-            stringstream ss(line);
-            string value;
-            vector<string> dataRow;
-            int index = 0;
-            while (getline(ss, value, ',')) {
-                if (index >= attributes.size()) {
-                    cerr << "Error: Number of columns in a row exceeds the number of attributes." << endl;
-                    return table;
-                }
-                table.data[attributes[index]].push_back(value);
-                index++;
+        while (getline(ss, value, ',')) {
+            if (index >= attributes.size()) {
+                cerr << "Error: Number of columns in a row exceeds the number of attributes." << endl;
+                return table;
             }
-        }
 
-        return table;
+            //parses for multivalued
+            if (value.front() == '"' && value.back() == '"')
+                value = value.substr(1, value.size() - 2);
+
+            stringstream valueStream(value);
+            string singleValue;
+
+            while (getline(valueStream, singleValue, '\"'))
+                table.data[attributes[index]].push_back(singleValue);
+            index++;
+        }
+      }
+
+      return table;
     }
 };
 
