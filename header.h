@@ -24,6 +24,10 @@ struct Table {
     //constructor that increments table
     Table(const vector<string>& tableAttributes, const vector<string> fd, const vector<string>& tableKeys)
         : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys)  {}
+        
+    //constructor that includes map
+    Table(const vector<string>& tableAttributes, const vector<string> fd, const vector<string>& tableKeys, unordered_map<string, vector<string>> tableData)
+        : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys), data(tableData)  {}
 
     //parser
     static Table parseCSV(const string& filename, const string& fileFD) {
