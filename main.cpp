@@ -13,6 +13,7 @@ int main(){
   input.open(fileFD);
 
   //getting functional dependencies
+  //fixme : add functional dependences to the table after it has been made
   vector<string> funcDeps;
   if (input.is_open())
   {
@@ -23,19 +24,10 @@ int main(){
     input.close();
   }
 
-
-
-  // int numTuples = getTupleAmount(file);
-  // vector<string> attributes = getAttributes(file);
-  // vector<vector<string>> tuples = returnTuples(file);
-  // vector<string> keys; //fixme : add keys input
-
-
-  // unordered_map<string, vector<string>> tupleMap = mapReturn(tuples, attributes);
-
   // vector<string> result = convertTo1NF(tupleMap);
 
-  Table testTable = Table::parseCSV(file, fileFD);
+  Table testTable = Table::parseCSV(file);
+
 
   //print_vector(result);
 
