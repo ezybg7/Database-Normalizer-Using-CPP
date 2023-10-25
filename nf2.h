@@ -4,17 +4,18 @@
 #include "header.h"
 #include "output.h"
 
-vector<string> convertTo2NF(const vector<string>& dataset, const vector<pair<unordered_set<string>, unordered_set<string>>>& functionalDependencies) {
+//vector<string> convertTo2NF(const vector<string>& dataset, const vector<pair<unordered_set<string>, unordered_set<string>>>& functionalDependencies) {
+vector<string> convertTo2NF(Table inputTable) {  
     vector<string> result;
 
     // Create a map for storing table rows based on the key
     unordered_map<string, vector<string>> resultMap;
 
     // Iterate through the dataset and organize data based on keys
-    for (const auto& row : dataset) {
+    for (const auto& row : inputTable.data) {
         // Extract key attributes based on functional dependencies
         string key;
-        for (const auto& fd : functionalDependencies) {
+        for (const auto& fd : inputTable.fundamentalDep) {
             if (includes(fd.first.begin(), fd.first.end(), values.begin(), values.end())) {
                 key = accumulate(fd.first.begin(), fd.first.end(), key, [](string& k, const string& v) { return k.empty() ? v : k + "," + v; });
                 break;

@@ -1,9 +1,4 @@
 #include "nf1.h"
-//#include "nf2.h"
-//#include "nf3.h"
-//#include "bcnf.h"
-//#include "nf4.h"
-//#include "nf5.h"
 #include "output.h"
 
 int Table::tableCount = 0;
@@ -40,7 +35,7 @@ int main(){
 
   // vector<string> result = convertTo1NF(tupleMap);
 
-  Table testTable = Table::parseCSV(file);
+  Table testTable = Table::parseCSV(file, fileFD);
 
   //print_vector(result);
 

@@ -4,10 +4,10 @@
 #include "header.h"
 #include "output.h"
 
-vector<string> convertTo1NF(unordered_map<string, vector<string>> resultMap) {
+vector<string> convertTo1NF(Table resultMap) {
     //Convert the map back to 1NF
     vector<string> result;
-    for (const auto& pair : resultMap) {
+    for (const auto& pair : resultMap.data) {
         stringstream rowStream;
         for (const auto& value : pair.second) {
             rowStream << value << ",";
