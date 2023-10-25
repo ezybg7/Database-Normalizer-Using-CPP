@@ -37,52 +37,68 @@ struct Table {
           FDinput.push_back(line2);
         parseFD.close();
       }
-
+      
       ifstream file(filename);
       string line;
-      getline(file, line);
 
+      getline(file, line);
       stringstream ss(line);
       string attribute;
       vector<string> attributes;
 
+      //gets attributes
       while (getline(ss, attribute, ',')) {
-          attributes.push_back(attribute);
+        attributes.push_back(attribute);
       }
-      
+      //creates a table with attributes
+      Table table(attributes, {}, {}); 
 
-      Table table(attributes, FDinput, {});
-
+      //actual parsing of data
       while (getline(file, line)) {
-
         stringstream ss(line);
         string value;
         vector<string> dataRow;
-        int index = 0;
+        bool inQuotes = false;
+        string tempValue = "";
 
         while (getline(ss, value, ',')) {
-            if (index >= attributes.size()) {
-                cerr << "Error: Number of columns in a row exceeds the number of attributes." << endl;
-                return table;
+          if (!inQuotes) {
+            //multivalued
+            if (value.front() == '\"' && value.back() == '\"') 
+              dataRow.push_back(value.substr(1, value.size() - 2));
+            else if (value.front() == '\"') {
+              //multi start
+              inQuotes = true;
+              tempValue = value.substr(1);
+            } 
+            else
+              dataRow.push_back(value);
+          } 
+          else {
+            //concatinating values
+            tempValue += "," + value;
+            if (value.back() == '\"') {
+              //multi end
+              inQuotes = false;
+              dataRow.push_back(tempValue.substr(0, tempValue.size() - 1));
             }
-
-            //parses for multivalued
-            if (value.front() == '"' && value.back() == '"')
-                value = value.substr(1, value.size() - 2);
-
-            stringstream valueStream(value);
-            string singleValue;
-
-            while (getline(valueStream, singleValue, '\"'))
-                table.data[attributes[index]].push_back(singleValue);
-            index++;
+          }
         }
-        file.close();
-        
+
+      if (dataRow.size() != attributes.size()) {
+          cerr << "Error: Number of columns in a row does not match the number of attributes." << endl;
+          return table;
       }
-      
-      return table;
+
+      //store data into table
+      for (size_t i = 0; i < attributes.size(); ++i) {
+          table.data[attributes[i]].push_back(dataRow[i]);
+      }
     }
+
+    return table;
+  }
+
 };
 
 // //creates unordered map using attributes and tuples, essentially creating each collumn. 
