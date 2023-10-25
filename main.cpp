@@ -6,6 +6,8 @@
 //#include "nf5.h"
 #include "output.h"
 
+int Table::tableCount = 0;
+
 int main(){
   const string file = "exampleInputTable.csv";
   const string fileFD = "functionalDependencies.txt";
@@ -28,17 +30,21 @@ int main(){
 
 
 
-  int numTuples = getTupleAmount(file);
-  vector<string> attributes = getAttributes(file);
-  vector<vector<string>> tuples = returnTuples(file);
-  vector<string> keys; //fixme : add keys input
+  // int numTuples = getTupleAmount(file);
+  // vector<string> attributes = getAttributes(file);
+  // vector<vector<string>> tuples = returnTuples(file);
+  // vector<string> keys; //fixme : add keys input
 
 
-  unordered_map<string, vector<string>> tupleMap = mapReturn(tuples, attributes);
+  // unordered_map<string, vector<string>> tupleMap = mapReturn(tuples, attributes);
 
-  vector<string> result = convertTo1NF(tupleMap);
+  // vector<string> result = convertTo1NF(tupleMap);
 
-  print_vector(result);
+  Table testTable = Table::parseCSV(file);
+
+  //print_vector(result);
+
+  print_map(testTable.data);
 
   //print_map(convertTo1NF(tupleMap));
 
