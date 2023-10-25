@@ -69,7 +69,7 @@ struct Table {
             else if (value.front() == '\"') {
               //multi start
               inQuotes = true;
-              tempValue = value.substr(1);
+              tempValue = value;
             } 
             else
               dataRow.push_back(value);
@@ -80,7 +80,7 @@ struct Table {
             if (value.back() == '\"') {
               //multi end
               inQuotes = false;
-              dataRow.push_back(tempValue.substr(0, tempValue.size() - 1));
+              dataRow.push_back(tempValue);
             }
           }
         }
