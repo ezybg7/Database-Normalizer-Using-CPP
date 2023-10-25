@@ -51,7 +51,7 @@ struct Table {
         attributes.push_back(attribute);
       }
       //creates a table with attributes
-      Table table(attributes, {}, {}); 
+      Table table(attributes, FDinput, {}); 
 
       //actual parsing of data
       while (getline(file, line)) {
