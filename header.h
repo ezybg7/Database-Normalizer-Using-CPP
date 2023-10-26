@@ -24,6 +24,10 @@ struct Table {
     //constructor that increments table
     Table(const vector<string>& tableAttributes, const vector<string> fd, const vector<string>& tableKeys)
         : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys)  {}
+        
+    //constructor that includes map
+    Table(const vector<string>& tableAttributes, const vector<string> fd, const vector<string>& tableKeys, unordered_map<string, vector<string>> tableData)
+        : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys), data(tableData)  {}
 
     //parser
     static Table parseCSV(const string& filename, const string& fileFD) {
@@ -51,7 +55,7 @@ struct Table {
         attributes.push_back(attribute);
       }
       //creates a table with attributes
-      Table table(attributes, {}, {}); 
+      Table table(attributes, FDinput, {}); 
 
       //actual parsing of data
       while (getline(file, line)) {
@@ -69,7 +73,7 @@ struct Table {
             else if (value.front() == '\"') {
               //multi start
               inQuotes = true;
-              tempValue = value.substr(1);
+              tempValue = value;
             } 
             else
               dataRow.push_back(value);
@@ -80,7 +84,7 @@ struct Table {
             if (value.back() == '\"') {
               //multi end
               inQuotes = false;
-              dataRow.push_back(tempValue.substr(0, tempValue.size() - 1));
+              dataRow.push_back(tempValue);
             }
           }
         }

@@ -10,11 +10,14 @@ int main(){
   // vector<string> result = convertTo1NF(tupleMap);
 
   Table testTable = Table::parseCSV(file, fileFD);
-
-
-  //print_vector(result);
-
-  print_map(testTable.data);
+  // if(is1NF(testTable))
+  //   cout << "is 1nf" << endl;
+  // else
+  //   cout << "is not 1nf" << endl;
+  
+  //print_map(testTable.data);
+  Table result = convertTo1NF(testTable);
+  print_map(result.data);
 
   //print_map(convertTo1NF(tupleMap));
 
