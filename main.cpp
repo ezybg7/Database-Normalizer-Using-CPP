@@ -18,7 +18,7 @@ int main(){
   //print_map(testTable.data);
   Table result = convertTo1NF(testTable);
   print_map(result.data);
-
+  print_query(result);
   //print_map(convertTo1NF(tupleMap));
 
 

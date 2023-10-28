@@ -40,4 +40,17 @@ void print_vector(const vector<string>& vec) {
 }
 //end of test code
 
+void print_query(Table query) {
+    ofstream outputFile;
+    outputFile.open("output.txt");
+    outputFile << "CREATE TABLE " << query.name << " (" << endl;
+    for(string i : query.attributes){
+        outputFile << "\t" << i << endl;
+    }
+
+    
+    outputFile.close();
+}
+
+
 #endif
