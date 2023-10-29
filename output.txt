@@ -1,4 +1,4 @@
-CREATE TABLE Table2 (
+CREATE TABLE Table3 (
 	StudentID,
 	FirstName,
 	LastName,
@@ -6,5 +6,4 @@ CREATE TABLE Table2 (
 	Professor,
 	ProfessorEmail,
 	CourseStart,
-	CourseEnd
-)
+	CourseEnd);

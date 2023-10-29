@@ -7,21 +7,52 @@ int main(){
   const string file = "exampleInputTable.csv";
   const string fileFD = "functionalDependencies.txt";
 
-  // vector<string> result = convertTo1NF(tupleMap);
-
   Table testTable = Table::parseCSV(file, fileFD);
-  // if(is1NF(testTable))
-  //   cout << "is 1nf" << endl;
-  // else
-  //   cout << "is not 1nf" << endl;
-  
-  //print_map(testTable.data);
-  Table result = convertTo1NF(testTable);
+
+  char form, find;
+
+  cout << "Choice of the highest normal form to reach (1: 1NF, 2: 2NF, 3: 3NF, B: BCNF, 4: 4NF, 5: 5NF):" << endl;
+  cin >> form;
+  cout << "Find the highest normal form of the input table? (1: Yes, 2: No):" << endl;
+  cin >> find;
+
+  Table result({}, {}, {}, {}, {}); 
+
+  switch(form) {
+    case '1':
+      result = convertTo1NF(testTable);
+      break;
+    case '2':
+      //result = convertTo2NF(testTable);
+      break;
+    case '3':
+      //result = convertTo3NF(testTable);
+      break;
+    case 'B':
+      //result = convertToBCNF(testTable);
+      break;
+    case '4':
+      //result = convertTo4NF(testTable);
+      break;
+    case '5':
+      //result = convertTo5NF(testTable);
+      break;
+    default:
+      cout << "Not a valid input" << endl;
+      break;
+  }
+
+  //FIXME: add new function that tests all tests, 
+  //If NF1, test for NF2, so on, so tests can be easier, i.e. only testing for FDs etc.
+  switch(find) {
+    case '1':
+      break;
+    case '2':
+      break;
+  }
+  print_vector(result.attributes);
   print_map(result.data);
   print_query(result);
-  //print_map(convertTo1NF(tupleMap));
-
-
 
   return 0;
 }
