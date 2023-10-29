@@ -16,7 +16,7 @@ using namespace std;
 //table struct so we can store each table
 struct Table {
   string name;
-  vector<string> attributes, keys, fundamentalDep;
+  vector<string> attributes, types, keys, fundamentalDep;
   unordered_map<string, vector<string>> data;
 
   static int tableCount;
@@ -26,8 +26,8 @@ struct Table {
   //     : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys)  {}
       
   //constructor that includes map
-  Table(const vector<string>& tableAttributes, const vector<string> fd, const vector<string>& tableKeys, unordered_map<string, vector<string>> tableData)
-      : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys), data(tableData)  {}
+  Table(const vector<string>& tableAttributes, const vector<string> fd, const vector<string>& tableKeys, unordered_map<string, vector<string>> tableData, const vector<string> type)
+      : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys), data(tableData), types(type)  {}
 
   //parser
   static Table parseCSV(const string& filename, const string& fileFD) {
@@ -55,7 +55,7 @@ struct Table {
       attributes.push_back(attribute);
     }
     //creates a table with attributes
-    Table table(attributes, FDinput, {}, {}); 
+    Table table(attributes, FDinput, {}, {}, {}); 
 
     //actual parsing of data
     while (getline(file, line)) {

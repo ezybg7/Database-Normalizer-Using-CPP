@@ -44,10 +44,15 @@ void print_query(Table query) {
     ofstream outputFile;
     outputFile.open("output.txt");
     outputFile << "CREATE TABLE " << query.name << " (" << endl;
-    for(string i : query.attributes){
-        outputFile << "\t" << i << endl;
+    int x = 0;
+    for( string i : query.attributes){
+        outputFile << "\t" << i;
+        if (x < query.attributes.size() - 1)
+            outputFile << "," << endl;
+        x++;
     }
 
+    outputFile << ")" << endl;
     
     outputFile.close();
 }

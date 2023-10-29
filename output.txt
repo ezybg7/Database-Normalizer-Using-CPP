@@ -1,9 +1,10 @@
 CREATE TABLE Table2 (
-	StudentID
-	FirstName
-	LastName
-	Course
-	Professor
-	ProfessorEmail
-	CourseStart
+	StudentID,
+	FirstName,
+	LastName,
+	Course,
+	Professor,
+	ProfessorEmail,
+	CourseStart,
 	CourseEnd
+)
