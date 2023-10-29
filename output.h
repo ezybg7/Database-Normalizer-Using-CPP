@@ -40,19 +40,24 @@ void print_vector(const vector<string>& vec) {
 }
 //end of test code
 
+//query output writing
 void print_query(Table query) {
+
     ofstream outputFile;
     outputFile.open("output.txt");
+
     outputFile << "CREATE TABLE " << query.name << " (" << endl;
     int x = 0;
     for( string i : query.attributes){
         outputFile << "\t" << i;
-        if (x < query.attributes.size() - 1)
+        if (x < query.attributes.size() - 1) //accounts for trailing comma
             outputFile << "," << endl;
         x++;
     }
+    //FIXME : Add foreign keys
 
-    outputFile << ")" << endl;
+
+    outputFile << ");" << endl;
     
     outputFile.close();
 }
