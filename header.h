@@ -21,11 +21,7 @@ struct Table {
 
   static int tableCount;
 
-  // //constructor that increments table
-  // Table(const vector<string>& tableAttributes, const vector<string> fd, const vector<string>& tableKeys)
-  //     : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys)  {}
-      
-  //constructor that includes map
+  //constructor
   Table(const vector<string>& tableAttributes, const vector<string> fd, const vector<string>& tableKeys, unordered_map<string, vector<string>> tableData, const vector<string> type)
       : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys), data(tableData), types(type)  {}
 
@@ -103,22 +99,5 @@ struct Table {
   }
 
 };
-
-// //creates unordered map using attributes and tuples, essentially creating each collumn. 
-// unordered_map<string, vector<string>> mapReturn(vector<vector<string>> tuples, vector<string> attributes)
-// {
-//   unordered_map<string, vector<string>> resultMap;
-
-//   for(int i = 0; i < attributes.size(); i++)
-//   {
-//     string key = attributes[i];
-//     for(int j = 0; j < tuples.size(); j++)
-//     {
-//       resultMap[key].push_back(tuples[j][i]);
-//       //cout << resultMap[key].back() << endl;
-//     }
-//   }
-//   return resultMap;
-// }
 
 #endif
