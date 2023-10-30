@@ -11,8 +11,45 @@
 #include <vector>
 #include <numeric>
 #include <algorithm>
+#include <cctype>
 
 using namespace std;
+
+//determine data types
+string determineDataType(const string& input) {
+  if (input.empty()) {
+    return "EMPTY";
+  }
+
+  //check int
+  bool isInteger = true;
+  for (char c : input) {
+    if (!isdigit(c)) {
+      isInteger = false;
+      break;
+    }
+  }
+
+  //output
+  if (isInteger) {
+    return "INT";
+  } else {
+    //check date
+    istringstream dateSS(input);
+    int month, day, year;
+    char delimiter;
+
+    //takes in whole input of date format month_int/date_int/year
+    dateSS >> month >> delimiter >> day >> delimiter >> year;
+
+    if (delimiter == '/') {
+      return "DATE";
+    } else {
+      return "STRING";
+    }
+  }
+}
+
 //table struct so we can store each table
 struct Table {
   string name;
@@ -46,12 +83,33 @@ struct Table {
     string attribute;
     vector<string> attributes;
 
+
+
     //gets attributes
     while (getline(ss, attribute, ',')) {
       attributes.push_back(attribute);
     }
+
+    //getting types
+    ifstream typeFile(filename);
+
+    string csvLine, field;
+
+    //ignores first line so we need 2 getlines
+    getline(typeFile, csvLine);
+    getline(typeFile, csvLine);
+    
+    istringstream ss2(csvLine);
+    vector<string> dataTypes;
+
+    while (getline(ss2, field, ',')) {
+      string dataType = determineDataType(field);
+      dataTypes.push_back(dataType);
+    }
+    typeFile.close();
+    
     //creates a table with attributes
-    Table table(attributes, FDinput, {}, {}, {}); 
+    Table table(attributes, FDinput, {}, {}, dataTypes); //fixme dataTypes isn't being set correctly in
 
     //actual parsing of data
     while (getline(file, line)) {
@@ -94,10 +152,10 @@ struct Table {
           table.data[attributes[i]].push_back(dataRow[i]);
       }
     }
-
+    file.close();
+    
     return table;
   }
-
 };
 
 #endif

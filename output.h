@@ -42,24 +42,26 @@ void print_vector(const vector<string>& vec) {
 
 //query output writing
 void print_query(Table query) {
-
     ofstream outputFile;
     outputFile.open("output.txt");
 
-    outputFile << "CREATE TABLE " << query.name << " (" << endl;
-    int x = 0;
-    for( string i : query.attributes){
-        outputFile << "\t" << i;
-        if (x < query.attributes.size() - 1) //accounts for trailing comma
-            outputFile << "," << endl;
-        x++;
+    if (outputFile.is_open()) {
+        outputFile << "CREATE TABLE " << query.name << " (" << endl;
+        for (size_t x = 0; x < query.attributes.size(); x++) {
+            outputFile << "\t" << query.attributes[x] << " " << query.types[x];
+            if (x < query.attributes.size() - 1) {
+                outputFile << "," << endl;
+            } else {
+                outputFile << endl;
+            }
+        }
+        outputFile << ");" << endl;
+
+        outputFile.close();
+
+    } else {
+        cout << "Error: Unable to open output file." << endl;
     }
-    //FIXME : Add foreign keys
-
-
-    outputFile << ");" << endl;
-    
-    outputFile.close();
 }
 
 

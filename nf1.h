@@ -60,7 +60,7 @@ Table convertTo1NF(Table inputTable) {
     //     }
     // }
     
-    Table newTable(inputTable.attributes, inputTable.fundamentalDep, inputTable.keys, inputValues, {});
+    Table newTable(inputTable.attributes, inputTable.fundamentalDep, inputTable.keys, inputValues, inputTable.types);
     return newTable;
 }
 

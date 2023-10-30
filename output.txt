@@ -1,9 +1,10 @@
 CREATE TABLE Table3 (
-	StudentID,
-	FirstName,
-	LastName,
-	Course,
-	Professor,
-	ProfessorEmail,
-	CourseStart,
-	CourseEnd);
+	StudentID INT,
+	FirstName STRING,
+	LastName STRING,
+	Course STRING,
+	Professor STRING,
+	ProfessorEmail STRING,
+	CourseStart DATE,
+	CourseEnd DATE
+);

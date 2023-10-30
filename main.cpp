@@ -44,13 +44,18 @@ int main(){
 
   //FIXME: add new function that tests all tests, 
   //If NF1, test for NF2, so on, so tests can be easier, i.e. only testing for FDs etc.
+  //If NF5, return NF5
+  //Each function should return, if not NF2, return NF1, if not NF3, return NF2, etc. 
   switch(find) {
+    //Yes
     case '1':
       break;
+    //No
     case '2':
       break;
   }
   print_vector(result.attributes);
+  print_vector(result.types);
   print_map(result.data);
   print_query(result);
 
