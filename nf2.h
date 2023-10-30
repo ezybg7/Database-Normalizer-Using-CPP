@@ -4,35 +4,64 @@
 #include "header.h"
 #include "output.h"
 
-//vector<string> convertTo2NF(const vector<string>& dataset, const vector<pair<unordered_set<string>, unordered_set<string>>>& functionalDependencies) {
-vector<string> convertTo2NF(Table inputTable) {  
-    vector<string> result;
-
-    // Create a map for storing table rows based on the key
-    unordered_map<string, vector<string>> resultMap;
-
-    // Iterate through the dataset and organize data based on keys
-    for (const auto& row : inputTable.data) {
-        // Extract key attributes based on functional dependencies
-        string key;
-        for (const auto& fd : inputTable.fundamentalDep) {
-            if (includes(fd.first.begin(), fd.first.end(), values.begin(), values.end())) {
-                key = accumulate(fd.first.begin(), fd.first.end(), key, [](string& k, const string& v) { return k.empty() ? v : k + "," + v; });
-                break;
-            }
-        }
-
-        // Add the row to the corresponding key in the resultMap
-        resultMap[key].push_back(accumulate(fd.second.begin(), fd.second.end(), "", [&](string& s, const string& v) { return s.empty() ? values[v] : s + "," + values[v]; }));
+//Check if it is in 1NF before operating
+Table convertTo2NF(Table inputTable)
+{
+    if (!is1NF(inputTable))
+    {
+        return inputTable;
     }
 
-    // Construct result by combining rows with the same keys
-    for (const auto& pair : resultMap) {
-        for (const auto& row : pair.second) {
-            result.push_back(pair.first + "," + row);
+    //Extract primary key and non-key attributes
+    vector<string> primaryKey = inputTable.keys;
+    vector<string> nonKeyAttributes;
+    for (const auto &attribute : inputTable.attributes)
+    {
+        if (find(primaryKey.begin(), primaryKey.end(), attribute) == primaryKey.end())
+        {
+            nonKeyAttributes.push_back(attribute);
         }
     }
 
-    return result;
+    unordered_map<string, Table> tables;
+
+    for (const auto &attribute : nonKeyAttributes)
+    {
+        //Create a new table with primary key
+        vector<string> tableAttributes = primaryKey;
+        tableAttributes.push_back(attribute);
+        Table newTable(tableAttributes, inputTable.fundamentalDep, primaryKey, {});
+        tables[attribute] = newTable;
+    }
+
+    //Add data into 2NF tables
+    for (size_t i = 0; i < inputTable.data[inputTable.attributes[0]].size(); i++)
+    {
+        vector<string> keyValues;
+        for (const auto &key : primaryKey)
+        {
+            keyValues.push_back(inputTable.data[key][i]);
+        }
+
+        //Add non-key attribute values to respective 2NF tables
+        for (const auto &attribute : nonKeyAttributes)
+        {
+            string value = inputTable.data[attribute][i];
+            vector<string> row = keyValues;
+            row.push_back(value);
+            tables[attribute].addRow(row);
+        }
+    }
+
+    //Create a new 2NF table
+    Table newTable(inputTable.keys, inputTable.fundamentalDep, inputTable.keys, {});
+
+    //Merge 2NF tables into the new table
+    for (const auto &pair : tables)
+    {
+        newTable.mergeTable(pair.second);
+    }
+
+    return newTable;
 }
 #endif

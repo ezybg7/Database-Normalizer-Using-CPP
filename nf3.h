@@ -4,36 +4,68 @@
 #include "header.h"
 #include "output.h"
 
-vector<string> convertTo3NF(const vector<string>& dataset, const vector<pair<unordered_set<string>, unordered_set<string>>>& functionalDependencies) {
-    vector<string> result;
-
-    // Create a map for storing table rows based on the key
-    unordered_map<string, vector<string>> resultMap;
-
-    // Iterate through the dataset and organize data based on keys
-    for (const auto& row : dataset) {
-        vector<string> values = splitString(row, ',');
-
-        // Extract key attributes based on functional dependencies
-        string key;
-        for (const auto& fd : functionalDependencies) {
-            if (includes(fd.first.begin(), fd.first.end(), values.begin(), values.end())) {
-                key = accumulate(fd.first.begin(), fd.first.end(), key, [](string& k, const string& v) { return k.empty() ? v : k + "," + v; });
-                break;
-            }
-        }
-
-        resultMap[key].push_back(accumulate(fd.second.begin(), fd.second.end(), "", [&](string& s, const string& v) { return s.empty() ? values[v] : s + "," + values[v]; }));
+Table convertTo3NF(Table inputTable)
+{
+    if (!is1NF(inputTable))
+    {
+        return inputTable;
     }
 
-    // Construct result by combining rows with the same keys
-    for (const auto& pair : resultMap) {
-        for (const auto& row : pair.second) {
-            result.push_back(pair.first + "," + row);
+    //Convert to 2NF
+    Table tableIn2NF = convertTo2NF(inputTable);
+
+    // Extract primary key and non-key attributes
+    vector<string> primaryKey = tableIn2NF.keys;
+    vector<string> nonKeyAttributes;
+    for (const auto &attribute : tableIn2NF.attributes)
+    {
+        if (find(primaryKey.begin(), primaryKey.end(), attribute) == primaryKey.end())
+        {
+            nonKeyAttributes.push_back(attribute);
         }
     }
 
-    return result;
+    unordered_map<string, Table> tables;
+
+    for (const auto &attribute : nonKeyAttributes)
+    {
+        //Create a new table with primary key and the current attribute
+        vector<string> tableAttributes = primaryKey;
+        tableAttributes.push_back(attribute);
+        Table newTable(tableAttributes, tableIn2NF.fundamentalDep, primaryKey, {});
+        tables[attribute] = newTable;
+    }
+
+    //Add data into 3NF tables
+    for (size_t i = 0; i < tableIn2NF.data[tableIn2NF.attributes[0]].size(); i++)
+    {
+        // Extract primary key values
+        vector<string> keyValues;
+        for (const auto &key : primaryKey)
+        {
+            keyValues.push_back(tableIn2NF.data[key][i]);
+        }
+
+        //Add non-key attribute values to respective 3NF tables
+        for (const auto &attribute : nonKeyAttributes)
+        {
+            string value = tableIn2NF.data[attribute][i];
+            vector<string> row = keyValues;
+            row.push_back(value);
+            tables[attribute].addRow(row);
+        }
+    }
+
+    //Create a new 3NF table
+    Table newTable(tableIn2NF.keys, tableIn2NF.fundamentalDep, tableIn2NF.keys, {});
+
+    //Merge 3NF tables into the new table
+    for (const auto &pair : tables)
+    {
+        newTable.mergeTable(pair.second);
+    }
+
+    return newTable;
 }
 
 #endif
