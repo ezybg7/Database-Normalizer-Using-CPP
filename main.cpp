@@ -16,26 +16,26 @@ int main(){
   cout << "Find the highest normal form of the input table? (1: Yes, 2: No):" << endl;
   cin >> find;
 
-  Table result({}, {}, {}, {}, {}); 
+  vector<Table> results;
 
   switch(form) {
     case '1':
-      result = convertTo1NF(testTable);
+      results.push_back(convertTo1NF(testTable));
       break;
     case '2':
-      //result = convertTo2NF(testTable);
+      //results = convertTo2NF(testTable);
       break;
     case '3':
-      //result = convertTo3NF(testTable);
+      //results = convertTo3NF(testTable);
       break;
     case 'B':
-      //result = convertToBCNF(testTable);
+      //results = convertToBCNF(testTable);
       break;
     case '4':
-      //result = convertTo4NF(testTable);
+      //results = convertTo4NF(testTable);
       break;
     case '5':
-      //result = convertTo5NF(testTable);
+      //results = convertTo5NF(testTable);
       break;
     default:
       cout << "Not a valid input" << endl;
@@ -54,9 +54,9 @@ int main(){
     case '2':
       break;
   }
-  print_vector(result.attributes);
-  print_vector(result.types);
-  print_map(result.data);
+  print_vector(results[0].attributes);
+  print_vector(results[0].types);
+  print_map(results[0].data);
   print_query(result);
 
   return 0;

@@ -54,7 +54,7 @@ Table convertTo2NF(Table inputTable)
     }
 
     //Create a new 2NF table
-    Table newTable(inputTable.keys, inputTable.fundamentalDep, inputTable.keys, {});
+    Table newTable(inputTable.keys, inputTable.fundamentalDep, inputTable.keys, tables,inputTable.types);
 
     //Merge 2NF tables into the new table
     for (const auto &pair : tables)
