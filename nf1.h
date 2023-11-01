@@ -14,12 +14,13 @@ Table convertTo1NF(Table inputTable) {
     //latter values created in new tuple
     //add new tuple to the end of the ordered map
     vector<vector<string>> newRows;
+    
     for(size_t i = 0; i < inputTable.data[inputTable.attributes[0]].size(); i++)
     {
       bool copy = false;
-      vector<string> multiValues;
+      unordered_map<int, vector<string>> mvHandle;
       vector<string> currentRow;
-      int dupIndex;
+      vector<int> dupIndex;
       for(size_t j = 0; j < inputTable.attributes.size(); j++)
       {
         string current = inputTable.data[inputTable.attributes[j]][i];
@@ -27,11 +28,12 @@ Table convertTo1NF(Table inputTable) {
       }
       for(size_t j = 0; j < inputTable.attributes.size(); j++)
       {
+        vector<string> multiValues;
         string current = inputTable.data[inputTable.attributes[j]][i];
         if(current.front() == '"' && current.back() == '"')
         {
           copy = true;
-          dupIndex = j;
+          dupIndex.push_back(j);
           stringstream commaSplit(current.substr(1, current.size()-2));
           while(commaSplit.good())
           {
@@ -39,6 +41,7 @@ Table convertTo1NF(Table inputTable) {
             getline(commaSplit, data, ',');
             multiValues.push_back(data);
           }
+          mvHandle[j] = multiValues;
           // for(size_t z = 0; z < multiValues.size(); z++)
           //   cout << multiValues[z] << endl;
           current = current.substr(1, current.find(',')-1);
@@ -47,12 +50,47 @@ Table convertTo1NF(Table inputTable) {
       }
       if(copy)
       {
-        for(size_t j = 1; j < multiValues.size(); j++)
-        {
+        // for(size_t j = 1; j < multiValues.size(); j++)
+        // {
+        //   vector<string> row = currentRow;
+        //   for(size_t k = 0; k < dupIndex.size(); k++)
+        //     row[dupIndex[k]] = multiValues[j];
+        //   newRows.push_back(row);
+        // }
+        for (const auto& [index, values] : mvHandle) {
           vector<string> row = currentRow;
-          row[dupIndex] = multiValues[j];
-          newRows.push_back(row);
+          // for (const auto& value : values) {
+          //     cout << "value: " << value << endl;
+          //     for (const auto& value2 : values)
+          //     {
+          //       if(value != value2)
+          //         cout << "value2: " << value2 << endl;
+          //     }
+          // }
+          for(size_t k = 1; k < mvHandle[index].size(); k++)
+          {
+            //cout << mvHandle[index][k] << " ";
+            row[index] = mvHandle[index][k];
+            // for(size_t l = 0; l < mvHandle[index].size(); l++)
+            // {
+            //   if(mvHandle[index][k] != mvHandle[index][l])
+            //   {
+            //     cout << " inner " << mvHandle[index][l] << " " << endl;
+            //     row[index] = mvHandle[index][k];
+                
+            //   }
+            // }
+            newRows.push_back(row);
+          }
+          
+        //     row[dupIndex[k]] = multiValues[j];
+        //   newRows.push_back(row);
+          // for (const auto& value : values) {
+          //     cout << "value: " << value << " ";
+          //     row[index] = value;
+          // }
         }
+        cout << endl;
       }
     }
     //for each vector in newRows, add that to the data map
@@ -64,15 +102,7 @@ Table convertTo1NF(Table inputTable) {
         inputValues[inputTable.attributes[index]].push_back(element);
         index++;
       }
-    }
-
-    // for (const auto& [attribute, values] : inputTable.data) {
-    //     for (const auto& value : values) {
-    //         inputValues[attribute].push_back(value);
-            
-    //     }
-    // }
-    
+    }   
     Table newTable(inputTable.attributes, inputTable.fundamentalDep, inputTable.keys, inputValues, inputTable.types);
     return newTable;
 }
