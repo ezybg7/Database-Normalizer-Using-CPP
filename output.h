@@ -49,6 +49,7 @@ void print_query(Table query) {
         outputFile << "CREATE TABLE " << query.name << " (" << endl;
         for (size_t x = 0; x < query.attributes.size(); x++) {
             outputFile << "\t" << query.attributes[x] << " " << query.types[x];
+
             if (x < query.attributes.size() - 1) {
                 outputFile << "," << endl;
             } else {

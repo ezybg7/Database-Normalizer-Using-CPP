@@ -20,10 +20,10 @@ int main(){
 
   switch(form) {
     case '1':
-      results.push_back(convertTo1NF(testTable));
+      results = convertTo1NF(testTable);
       break;
     case '2':
-      //results = convertTo2NF(testTable);
+      results = convertTo2NF(testTable);
       break;
     case '3':
       //results = convertTo3NF(testTable);

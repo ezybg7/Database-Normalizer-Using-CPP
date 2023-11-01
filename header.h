@@ -45,7 +45,7 @@ string determineDataType(const string& input) {
     if (delimiter == '/') {
       return "DATE";
     } else {
-      return "STRING";
+      return "VARCHAR(255)";
     }
   }
 }
