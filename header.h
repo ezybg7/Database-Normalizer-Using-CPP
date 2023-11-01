@@ -15,6 +15,39 @@
 
 using namespace std;
 
+//taking in keys, account for compostite keys
+vector<string> parseInputKeys(const string& input) {
+    vector<string> keys;
+    stringstream ss(input);
+    string token;
+    bool inQuotes = false;
+    string compositeKey = "";
+
+    while (getline(ss, token, ',')) {
+      if (inQuotes) {
+        compositeKey += token;
+        if (token.back() == '\"') {
+          inQuotes = false;
+          keys.push_back(compositeKey);
+          compositeKey = "";
+        } else {
+          compositeKey += ",";
+        }
+      } else {
+        if (token.front() == '\"' && token.back() == '\"') {
+          keys.push_back(token);
+        } else if (token.front() == '\"') {
+          inQuotes = true;
+          compositeKey = token + ",";
+        } else {
+          keys.push_back(token);
+        }
+      }
+    }
+
+  return keys;
+}
+
 //determine data types
 string determineDataType(const string& input) {
   if (input.empty()) {
@@ -60,7 +93,7 @@ struct Table {
 
   //constructor
   Table(const vector<string>& tableAttributes, const vector<string> fd, const vector<string>& tableKeys, unordered_map<string, vector<string>> tableData, const vector<string> type)
-      : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys), data(tableData), types(type)  {}
+    : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys), data(tableData), types(type)  {}
 
   //parser
   static Table parseCSV(const string& filename, const string& fileFD) {
@@ -108,8 +141,10 @@ struct Table {
     }
     typeFile.close();
     
+
+
     //creates a table with attributes
-    Table table(attributes, FDinput, {}, {}, dataTypes); //fixme dataTypes isn't being set correctly in
+    Table table(attributes, FDinput, {}, {}, dataTypes);
 
     //actual parsing of data
     while (getline(file, line)) {
