@@ -8,10 +8,9 @@
 
 Table convertTo3NF(Table inputTable)
 {
-    for(const Table* i: input)
+    if (!is1NF(inputTable))
     {
-        if(!is1NF(i))
-            i = convertTo1NF(i);
+        return inputTable;
     }
 
     Table tableIn2NF = convertTo2NF(inputTable);
@@ -29,7 +28,6 @@ Table convertTo3NF(Table inputTable)
     vector<Table> result;
 
     return result;
-
 }
 
 #endif
