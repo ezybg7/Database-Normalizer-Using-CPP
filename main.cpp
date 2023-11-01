@@ -57,7 +57,7 @@ int main(){
   print_vector(results[0].attributes);
   print_vector(results[0].types);
   print_map(results[0].data);
-  print_query(result);
+  print_query(results[0]);
 
   return 0;
 }

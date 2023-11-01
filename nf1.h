@@ -14,33 +14,46 @@ Table convertTo1NF(Table inputTable) {
     //latter values created in new tuple
     //add new tuple to the end of the ordered map
     vector<vector<string>> newRows;
-    for(int i = 0; i < inputTable.data[inputTable.attributes[0]].size(); i++)
+    for(size_t i = 0; i < inputTable.data[inputTable.attributes[0]].size(); i++)
     {
       bool copy = false;
-      vector<string> row, row2;
-      for(int j = 0; j < inputTable.attributes.size(); j++)
+      vector<string> multiValues;
+      vector<string> currentRow;
+      int dupIndex;
+      for(size_t j = 0; j < inputTable.attributes.size(); j++)
       {
         string current = inputTable.data[inputTable.attributes[j]][i];
-        string secondPart = "";
+        currentRow.push_back(current);
+      }
+      for(size_t j = 0; j < inputTable.attributes.size(); j++)
+      {
+        string current = inputTable.data[inputTable.attributes[j]][i];
         if(current.front() == '"' && current.back() == '"')
         {
           copy = true;
-          secondPart = current.substr(current.find(',')+1, current.size()-current.find(',')-2);
+          dupIndex = j;
+          stringstream commaSplit(current.substr(1, current.size()-2));
+          while(commaSplit.good())
+          {
+            string data;
+            getline(commaSplit, data, ',');
+            multiValues.push_back(data);
+          }
+          // for(size_t z = 0; z < multiValues.size(); z++)
+          //   cout << multiValues[z] << endl;
           current = current.substr(1, current.find(',')-1);
-          //this only checks for 2 values, need to be able to check for 2+ later
         }
-        row.push_back(current);
         inputValues[inputTable.attributes[j]].push_back(current);
-        if(secondPart != "")
-          row2.push_back(secondPart);
-        else
-          row2.push_back(current);
-        
       }
-      //print_vector(row);
       if(copy)
-        newRows.push_back(row2);
-      //cout << endl;
+      {
+        for(size_t j = 1; j < multiValues.size(); j++)
+        {
+          vector<string> row = currentRow;
+          row[dupIndex] = multiValues[j];
+          newRows.push_back(row);
+        }
+      }
     }
     //for each vector in newRows, add that to the data map
     for(const auto& row : newRows)
