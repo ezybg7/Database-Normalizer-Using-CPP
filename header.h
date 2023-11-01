@@ -15,39 +15,6 @@
 
 using namespace std;
 
-//taking in keys, account for compostite keys
-vector<string> parseInputKeys(const string& input) {
-    vector<string> keys;
-    stringstream ss(input);
-    string token;
-    bool inQuotes = false;
-    string compositeKey = "";
-
-    while (getline(ss, token, ',')) {
-      if (inQuotes) {
-        compositeKey += token;
-        if (token.back() == '\"') {
-          inQuotes = false;
-          keys.push_back(compositeKey);
-          compositeKey = "";
-        } else {
-          compositeKey += ",";
-        }
-      } else {
-        if (token.front() == '\"' && token.back() == '\"') {
-          keys.push_back(token);
-        } else if (token.front() == '\"') {
-          inQuotes = true;
-          compositeKey = token + ",";
-        } else {
-          keys.push_back(token);
-        }
-      }
-    }
-
-  return keys;
-}
-
 //determine data types
 string determineDataType(const string& input) {
   if (input.empty()) {
@@ -97,7 +64,7 @@ struct Table {
 
   //parser
   static Table parseCSV(const string& filename, const string& fileFD) {
-      
+    //FD parser
     ifstream parseFD(fileFD);
     string line2;
     vector<string> FDinput;
@@ -107,7 +74,19 @@ struct Table {
         FDinput.push_back(line2);
       parseFD.close();
     }
-    
+
+    //key parser
+    string keysIn;
+
+    cout << "\nEnter keys seperated by , " << endl;
+    cin >> keysIn;
+    stringstream ks(keysIn);
+    string keyHere;
+    vector<string> parsedKeys;
+    while (getline(ks, keyHere, ',')){
+      parsedKeys.push_back(keyHere);
+    }
+
     ifstream file(filename);
     string line;
 
@@ -116,14 +95,12 @@ struct Table {
     string attribute;
     vector<string> attributes;
 
-
-
-    //gets attributes
+    //attribute parser
     while (getline(ss, attribute, ',')) {
       attributes.push_back(attribute);
     }
 
-    //getting types
+    //type parser
     ifstream typeFile(filename);
 
     string csvLine, field;
@@ -144,7 +121,7 @@ struct Table {
 
 
     //creates a table with attributes
-    Table table(attributes, FDinput, {}, {}, dataTypes);
+    Table table(attributes, FDinput, parsedKeys, {}, dataTypes);
 
     //actual parsing of data
     while (getline(file, line)) {
