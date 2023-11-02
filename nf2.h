@@ -6,13 +6,11 @@
 #include "output.h"
 
 //Check if it is in 1NF before operating
-Table convertTo2NF(vector<Table> input)
+vector<Table> convertTo2NF(Table inputTable)
 {
-    for(const Table* i: input)
-    {
-        if(!is1NF(i))
-            i = convertTo1NF(i);
-    }
+    if(!is1NF(inputTable))
+        inputTable = convertTo1NF(inputTable);
+    
 
     //Extract primary key and non-key attributes
     vector<string> primaryKey = inputTable.keys;
