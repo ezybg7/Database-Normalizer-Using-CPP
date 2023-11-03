@@ -74,9 +74,7 @@ vector<Table> convertTo2NF(Table inputTable)
     for (const auto &attribute : inputTable.attributes)
     {
         if(find(primaryKey.begin(), primaryKey.end(), attribute) == primaryKey.end())
-        {
           nonKeyAttributes.push_back(attribute);
-        }
     }
     vector<string> normalizedFDs;
     for(const auto& fd: inputTable.fundamentalDep)
@@ -87,10 +85,7 @@ vector<Table> convertTo2NF(Table inputTable)
       parsedLHS = parseFD(LHS, parsedLHS);
       parsedRHS = parseFD(RHS, parsedRHS);
       if((parsedLHS == primaryKey) || IsSubset(primaryKey, parsedLHS)) //if not a partial dependency or LHS is subset, keep it
-      {
         normalizedFDs.push_back(fd);
-        //cout << fd << endl;
-      }
       //if none of LHS is in the primary key, then make the primary keys the LHS
       else 
       {
@@ -136,116 +131,47 @@ vector<Table> convertTo2NF(Table inputTable)
         normalizedFDs.push_back(constructFD(newLHS, newRHS));
       }
     }
-    cout << "NORMALIZED FDS: " << endl;
-    for (const string& element : normalizedFDs) 
-        cout << element << " " << endl;
-    for(const auto& fd : inputTable.fundamentalDep)
+    // cout << "NORMALIZED FDS: " << endl;
+    // for (const string& element : normalizedFDs) 
+    //     cout << element << " " << endl;
+    for(const auto& fd : normalizedFDs)
     {
       string LHS = fd.substr(0, fd.find("->"));
       string RHS = fd.substr(fd.find("->")+2, fd.size()-1);
-      //cases (in priority):
-      //1: fd equals the entirely of the primaryKey vector (not partial)
-      //2: fd equals one/some of the primaryKey vector
-      //3: 
-      //cout << fd.substr(0, fd.find("->")) << endl;
-      //case 2:
-      for(const auto& key : primaryKey)
+
+      vector<string> newAttributes, newFD, newKeys, newDTs;
+      unordered_map<string, vector<string>> newData;
+
+      newKeys = parseFD(LHS, newKeys);
+      newAttributes = parseFD(LHS, newAttributes);
+      newAttributes = parseFD(RHS, newAttributes);
+      newFD.push_back(fd);
+      for(const auto& attribute : newAttributes)
+        newDTs.push_back(determineDataType(attribute));
+      for(const auto& [attribute, values] : inputTable.data)
       {
-        //if(fd == primaryKey)
-        if(LHS == key)
+        for(const auto& newAt : newAttributes)
         {
-          vector<string> newDTs; 
-          vector<string> newFDs;
-          newFDs.push_back(fd);
-
-          vector<string> newKeys;
-          newKeys.push_back(LHS);
-
-          vector<string> newAttributes; 
-          {stringstream commaSplit(LHS);
-          while(commaSplit.good())
+          if(attribute == newAt)
           {
-            string data;
-            getline(commaSplit, data, ',');
-            newAttributes.push_back(data);
-            newDTs.push_back(determineDataType(data));
-          }}
-          {stringstream commaSplit(RHS);
-          while(commaSplit.good())
-          {
-            string data;
-            getline(commaSplit, data, ',');
-            newAttributes.push_back(data);
-            newDTs.push_back(determineDataType(data));
-          }}
-          print_vector(newDTs);
-
-          unordered_map<string, vector<string>> newData;
-          for(const auto& [attribute, values] : inputTable.data)
-          {
-            for(const auto& newAt : newAttributes)
-            {
-              if(attribute == newAt)
-              {
-                for(const auto& value : values)
-                {
-                  newData[attribute].push_back(value);
-                }  
-              }
-            }
+            for(const auto& value : values)
+              newData[attribute].push_back(value);
           }
-          //print_map(newData);
-          Table newTable(newAttributes, newFDs, newKeys, newData, newDTs);
-          result.push_back(newTable);
-        }
-        else //new table will include composite key and remaining attributes
-        {
-          unordered_map<string, vector<string>> newData;
-          vector<string> newAttributes; 
-          vector<string> newDTs; 
-          vector<string> newFDs;
-          vector<string> newKeys = primaryKey; //temp
-          for(const auto& key : primaryKey)
-            newAttributes.push_back(key);
-          // {stringstream commaSplit(LHS);
-          // while(commaSplit.good())
-          // {
-          //   string data;
-          //   getline(commaSplit, data, ',');
-          //   cout << "hi" << data << endl;
-          //   newAttributes.push_back(data);
-          //   newDTs.push_back(determineDataType(LHS));
-          // }}  
-
-          for(const auto& [attribute, values] : inputTable.data)
-          {
-            for(const auto& newAT : newAttributes)
-            {
-              if(attribute == key)
-              {
-                for(const auto& value : values)
-                {
-                  newData[attribute].push_back(value);
-                }  
-              }
-            }
-          }
-          cout << "3rd case data: " << endl;
-          print_map(newData);
-          // Table newTable(newAttributes, newFDs, newKeys, newData, newDTs);
-          // result.push_back(newTable);
         }
       }
-      
-    }
-    // cout << "keys:" << endl;
-    // print_vector(primaryKey);
-    // cout << "nonkeys:" << endl;
-    // print_vector(nonKeyAttributes);
-
-
-
-
+      Table newTable(newAttributes, newFD, newKeys, newData, newDTs);
+      result.push_back(newTable);
+      print_map(newTable.data);
+      cout << endl;
+      }
     return result;
+}
+
+bool is2NF(Table inputTable)
+{
+  if(!is1NF(inputTable))
+    return false;
+  //this is not done yet lol
+  return true;
 }
 #endif
