@@ -66,8 +66,11 @@ vector<Table> convertTo2NF(Table inputTable)
 {
     if(!is1NF(inputTable))
         inputTable = convertTo1NF(inputTable);
+  
+    result.push_back(inputTable);
     
     vector<Table> result;
+    
     //Extract primary key and non-key attributes
     vector<string> primaryKey = inputTable.keys;
 
