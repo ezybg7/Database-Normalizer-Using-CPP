@@ -55,10 +55,14 @@ int main(){
     case '2':
       break;
   }
-  print_vector(results[0].attributes);
-  print_vector(results[0].types);
-  print_map(results[0].data);
-  print_query(results[0]);
+  for(size_t i = 0; i < results.size(); i++)
+  {
+    print_vector(results[i].attributes);
+    print_vector(results[i].types);
+    print_map(results[i].data);
+    print_query(results[i]);
+    }
+  
 
   return 0;
 }

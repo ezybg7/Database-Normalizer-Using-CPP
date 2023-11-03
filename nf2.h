@@ -120,6 +120,7 @@ vector<Table> convertTo2NF(Table inputTable)
               bool addToFD = true;
               for(const auto& pKey : primaryKey)
               {
+                //NOTE: this might cause future issues since it only looks at each key at a time for composite keys
                 if(isFD(pKey, attribute, inputTable.data))
                   addToFD = false;
               }
@@ -146,8 +147,7 @@ vector<Table> convertTo2NF(Table inputTable)
       newAttributes = parseFD(LHS, newAttributes);
       newAttributes = parseFD(RHS, newAttributes);
       newFD.push_back(fd);
-      for(const auto& attribute : newAttributes)
-        newDTs.push_back(determineDataType(attribute));
+      
       for(const auto& [attribute, values] : inputTable.data)
       {
         for(const auto& newAt : newAttributes)
@@ -159,10 +159,10 @@ vector<Table> convertTo2NF(Table inputTable)
           }
         }
       }
+      for(const auto& attribute : newAttributes)
+        newDTs.push_back(determineDataType(newData[attribute][0]));
       Table newTable(newAttributes, newFD, newKeys, newData, newDTs);
       result.push_back(newTable);
-      print_map(newTable.data);
-      cout << endl;
       }
     return result;
 }
@@ -172,6 +172,7 @@ bool is2NF(Table inputTable)
   if(!is1NF(inputTable))
     return false;
   //this is not done yet lol
+  //if statements for checking isFD for all FDs in table
   return true;
 }
 #endif
