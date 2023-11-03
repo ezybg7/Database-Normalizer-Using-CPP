@@ -70,12 +70,7 @@ vector<Table> convertTo2NF(Table inputTable)
     vector<Table> result;
     //Extract primary key and non-key attributes
     vector<string> primaryKey = inputTable.keys;
-    vector<string> nonKeyAttributes;
-    for (const auto &attribute : inputTable.attributes)
-    {
-        if(find(primaryKey.begin(), primaryKey.end(), attribute) == primaryKey.end())
-          nonKeyAttributes.push_back(attribute);
-    }
+
     vector<string> normalizedFDs;
     for(const auto& fd: inputTable.fundamentalDep)
     {
@@ -171,8 +166,22 @@ bool is2NF(Table inputTable)
 {
   if(!is1NF(inputTable))
     return false;
-  //this is not done yet lol
-  //if statements for checking isFD for all FDs in table
-  return true;
+  for(const auto& fd: inputTable.fundamentalDep)
+  {
+    string LHS = fd.substr(0, fd.find("->"));
+    string RHS = fd.substr(fd.find("->")+2, fd.size()-1);
+    vector<string> parsedLHS, parsedRHS;
+    parsedLHS = parseFD(LHS, parsedLHS);
+    parsedRHS = parseFD(RHS, parsedRHS);
+    //maybe if LHS doesnt contain primary key or a subset of primary key?
+    for(const auto& LHS : parsedLHS)
+    {
+      for(const auto& RHS : parsedRHS)
+      {
+        
+      }
+    }
+  }
+  return false; //should be true, temporarily false
 }
 #endif

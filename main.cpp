@@ -1,5 +1,6 @@
 #include "nf1.h"
 #include "nf2.h"
+#include "nf3.h"
 #include "output.h"
 
 int Table::tableCount = 0;
@@ -27,7 +28,7 @@ int main(){
       results = convertTo2NF(testTable);
       break;
     case '3':
-      //results = convertTo3NF(testTable);
+      results = convertTo3NF(testTable);
       break;
     case 'B':
       //results = convertToBCNF(testTable);
