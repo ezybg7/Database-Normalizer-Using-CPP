@@ -41,11 +41,12 @@ void print_vector(const vector<string>& vec) {
 //end of test code
 
 //query output writing
-void print_query(Table query) {
+void print_query(vector<Table> queries) {
     ofstream outputFile;
     outputFile.open("output.txt");
 
     if (outputFile.is_open()) {
+      for(const auto& query : queries) {
         outputFile << "CREATE TABLE " << query.name << " (" << endl;
         for (size_t x = 0; x < query.attributes.size(); x++) {
             outputFile << "\t" << query.attributes[x] << " " << query.types[x];
@@ -57,8 +58,9 @@ void print_query(Table query) {
             }
         }
         outputFile << ");" << endl;
-
-        outputFile.close();
+        outputFile << endl;
+      }
+      outputFile.close();
 
     } else {
         cout << "Error: Unable to open output file." << endl;

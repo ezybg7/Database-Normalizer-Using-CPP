@@ -1,10 +1,20 @@
-CREATE TABLE Table3 (
+CREATE TABLE Table2 (
 	StudentID INT,
-	FirstName STRING,
-	LastName STRING,
-	Course STRING,
-	Professor STRING,
-	ProfessorEmail STRING,
-	CourseStart DATE,
-	CourseEnd DATE
+	FirstName VARCHAR(255),
+	LastName VARCHAR(255)
 );
+
+CREATE TABLE Table3 (
+	Course VARCHAR(255),
+	CourseStart DATE,
+	CourseEnd DATE
+);
+
+CREATE TABLE Table4 (
+	StudentID INT,
+	Course VARCHAR(255),
+	Professor VARCHAR(255),
+	ProfessorEmail VARCHAR(255),
+	classRoom VARCHAR(255)
+);
+

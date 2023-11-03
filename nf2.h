@@ -66,9 +66,6 @@ vector<Table> convertTo2NF(Table inputTable)
 {
     if(!is1NF(inputTable))
         inputTable = convertTo1NF(inputTable);
-  
-    result.push_back(inputTable);
-    
     vector<Table> result;
     
     //Extract primary key and non-key attributes
@@ -177,14 +174,30 @@ bool is2NF(Table inputTable)
     parsedLHS = parseFD(LHS, parsedLHS);
     parsedRHS = parseFD(RHS, parsedRHS);
     //maybe if LHS doesnt contain primary key or a subset of primary key?
-    for(const auto& LHS : parsedLHS)
+    if(parsedLHS != inputTable.keys)
     {
-      for(const auto& RHS : parsedRHS)
+      return false;
+      // if(find(inputTable.keys.begin(), inputTable.keys.end(), LHS) != inputTable.keys.end()) 
+      // {
+
+      // }
+      // else
+      //   return false;
+    }
+    else
+    {
+      for(const auto& LHS : parsedLHS)
       {
-        
+        for(const auto& RHS : parsedRHS)
+        {
+          if(!(isFD(LHS, RHS, inputTable.data)))
+            return false;    
+        }
       }
     }
+    
+    
   }
-  return false; //should be true, temporarily false
+  return true; //should be true, temporarily false
 }
 #endif
