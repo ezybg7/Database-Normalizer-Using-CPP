@@ -80,17 +80,17 @@ vector<Table> convertToBCNF(vector<Table> inputTables) {
   
     vector<Table> result;
     //vector<Table> test = inputTables.front();
-    for(const auto& table : inputTables)
-    {
-      if(!is3NF(table))
-      {
-        vector<Table> convertedTables = convertTo3NF(table);
-        for(const auto& element : convertedTables)
-          result.push_back(element);
-      }
-      else
-        result.push_back(table);
-    }
+    // for(const auto& table : inputTables)
+    // {
+    //   if(!is3NF(table))
+    //   {
+    //     vector<Table> convertedTables = convertTo3NF(table);
+    //     for(const auto& element : convertedTables)
+    //       result.push_back(element);
+    //   }
+    //   else
+    //     result.push_back(table);
+    // }
   // if(!is3NF(inputTable))
   //   convertedTables = convertTo2NF(inputTable);
   // else
@@ -112,13 +112,25 @@ vector<Table> convertToBCNF(vector<Table> inputTables) {
                     //if it exists make a table based on it and push the table into result
                     if(in_vector(LHS[i], RHS[i][j])){
                         Table newTable = createTable(constructFD(LHS[i], RHS[i]), inputTable);
+                        result.push_back(newTable);
+
+                        //pushing inputTable that has had attribute removed
+                        inputTable.remove_columns(inputTable, 
+                        //RHS[i][j] is the right side attribute that exists within LHS
+                        //the we find the position of this attribute on the LHS, which
+                        //tells us which FD it is, allowing us to get the RHS of that FD
+                        //which we then use to remove those attributes from then inputTable
+                        RHS[find_position(LHS,RHS[i][j])]);
+
+                        result.push_back(inputTable);
+
                         LHS.erase(LHS.begin());
                         RHS.erase(RHS.begin());
-                        vector<string> temp;
-                        temp.push_back(RHS[i][j]);
-                        inputTable.remove_columns(newTable, temp);
+                        break;
+                    }
+                    else{
                         result.push_back(inputTable);
-                        result.push_back(newTable);
+                        break;
                     }
                 }
             }
