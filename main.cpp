@@ -21,6 +21,28 @@ int main(){
 
   //print_map(testTable.data);
 
+  //FIXME: add new function that tests all tests, 
+  //If NF1, test for NF2, so on, so tests can be easier, i.e. only testing for FDs etc.
+  //If NF5, return NF5
+  //Each function should return, if not NF2, return NF1, if not NF3, return NF2, etc. 
+  cout << "Highest normal form of the input table: ";
+  switch(find) {
+    //Yes
+    case '1':
+      if(is3NF(testTable))
+        cout << "3NF" << endl;
+      else if(is2NF(testTable))
+        cout << "2NF" << endl;
+      else if(is1NF(testTable))
+        cout << "1NF" << endl;
+      else
+        cout << "0NF" << endl;   
+      break;
+    //No
+    case '2':
+      break;
+  }
+
   vector<Table> results;
 
   switch(form) {
@@ -48,33 +70,12 @@ int main(){
       break;
   }
 
-  //FIXME: add new function that tests all tests, 
-  //If NF1, test for NF2, so on, so tests can be easier, i.e. only testing for FDs etc.
-  //If NF5, return NF5
-  //Each function should return, if not NF2, return NF1, if not NF3, return NF2, etc. 
-  cout << "Highest normal form of the input table: ";
-  switch(find) {
-    //Yes
-    case '1':
-      if(is3NF(testTable))
-        cout << "3NF" << endl;
-      else if(is2NF(testTable))
-        cout << "2NF" << endl;
-      else if(is1NF(testTable))
-        cout << "1NF" << endl;
-      else
-        cout << "0NF" << endl;   
-      break;
-    //No
-    case '2':
-      break;
-  }
-  for(size_t i = 0; i < results.size(); i++)
-  {
-    print_vector(results[i].attributes);
-    print_vector(results[i].types);
-    print_map(results[i].data);
-  }
+  // for(size_t i = 0; i < results.size(); i++)
+  // {
+  //   print_vector(results[i].attributes);
+  //   print_vector(results[i].types);
+  //   print_map(results[i].data);
+  // }
   print_query(results);
   
 

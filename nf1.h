@@ -90,7 +90,7 @@ Table convertTo1NF(Table inputTable) {
           //     row[index] = value;
           // }
         }
-        cout << endl;
+        //cout << endl;
       }
     }
     //for each vector in newRows, add that to the data map

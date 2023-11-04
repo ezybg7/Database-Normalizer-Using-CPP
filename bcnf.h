@@ -58,8 +58,7 @@ vector<string> rhs_parser(const string& fd) {
 }
 
 //checks if value in vector
-template <typename T>
-bool in_vector(const vector<T>& vec, const T& value) {
+bool in_vector(const vector<string>& vec, const string& value) {
     return find(vec.begin(), vec.end(), value) != vec.end();
 }
 
@@ -79,33 +78,41 @@ int find_position(const vector<string>& strings, const string& valueToFind) {
 vector<Table> convertToBCNF(vector<Table> inputTables) {
   
     vector<Table> result;
-
-    vector<string> LHS;
+    vector<vector<string>> LHS, RHS;
 
     for(auto& inputTable : inputTables){
-        //store original FDs to check for changes
-        vector<string> originalFDs = inputTable.fundamentalDep;
+        //lhs & rhs[[0,1,2,3],[0,1,2,3]]
+        //access by using i.e. lhs[i][j]
+        for(const auto& fd : inputTable.fundamentalDep)
+        {
+            cout << fd << endl;
+            LHS.push_back(lhs_parser(fd));
+            RHS.push_back(rhs_parser(fd));
+            cout << "lhs size: " << LHS.size() << endl;
+            cout << "rhs size: " << RHS.size() << endl;
+            //checks all functional dependencies of table
+            for(size_t i = 0; i < LHS.size(); i++){
+                //checks all the RHS values and see if they exist within LHS
+                for(size_t j = 0; j < RHS[i].size(); j++){
+                    cout << "comparing " << i << " : " << j << endl;
+                    //if it exists make a table based on it and push the table into result
+                    if(in_vector(LHS[i], RHS[i][j])){
+                        vector<string> rmAt;
 
-        //iterate through FD of the inputTable
-        for(const auto& fd : originalFDs) {
-            vector<string> temp = lhs_parser(fd);
-            LHS.insert(result.end(), temp.begin(), temp.end());
-            vector<string> RHS = rhs_parser(fd);
-            bool isBCNF = true;
+                        cout << "HIIIIIIIIIIIIIIIIIII" << endl;
+                        Table newTable = createTable(constructFD(LHS[i], RHS[i]), inputTable);
+                        result.push_back(newTable);
+                        //find which fd has rhs in lhs
+                        int fdPos = find_position(LHS[i],RHS[i][j]);
+                        //remove that attribute that is dupe
+                        rmAt.push_back(RHS[fdPos][0]);
+                        
+                        //pushing inputTable that has had attribute removed
+                        inputTable.remove_columns(inputTable, rmAt);
 
-            //check if the FD violates BCNF
-            for(const auto& rhsAttribute : RHS) {
-                if(in_vector(LHS, rhsAttribute)) {
-                    isBCNF = false;
-                    break;
+                        break;
+                    }
                 }
-            }
-
-            if(!isBCNF) {
-                //create a new table with FDs [LHS->RHS] and update inputTable by removing RHS attributes
-                Table newTable = createTable(constructFD(temp, RHS), inputTable);
-                inputTable.remove_columns(inputTable, RHS);
-                result.push_back(newTable);
             }
         }
 
