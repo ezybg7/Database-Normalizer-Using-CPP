@@ -101,28 +101,27 @@ vector<Table> convertToBCNF(vector<Table> inputTables) {
         //access by using i.e. lhs[i][j]
         for(const auto& fd : inputTable.fundamentalDep)
         {
-          vector<vector<string>> LHS, RHS;
-          LHS.push_back(lhs_parser(fd));
-          RHS.push_back(rhs_parser(fd));
-        
-          //checks all functional dependencies of table
-          for(size_t i = 0; i < LHS.size(); i++){
-              //checks all the RHS values and see if they exist within LHS
-              for(size_t j = 0; j < RHS[i].size(); j++){
-                  //if it exists make a table based on it and push the table into result
-                  if(in_vector(LHS[i], RHS[i][j])){
-                      Table newTable = createTable(constructFD(LHS[i], RHS[i]), inputTable);
-                      newTable.remove_columns(newTable, LHS[i]);
-                      newTable.remove_columns(newTable, RHS[i]);
-                      result.push_back(createTable(constructFD(LHS[i], RHS[i]), inputTable));
-                  }
-                  else
-                  {
-                    result.push_back(inputTable);
-                    break;
-                  }
-              }
-          }
+            vector<vector<string>> LHS, RHS;
+            LHS.push_back(lhs_parser(fd));
+            RHS.push_back(rhs_parser(fd));
+          
+            //checks all functional dependencies of table
+            for(size_t i = 0; i < LHS.size(); i++){
+                //checks all the RHS values and see if they exist within LHS
+                for(size_t j = 0; j < RHS[i].size(); j++){
+                    //if it exists make a table based on it and push the table into result
+                    if(in_vector(LHS[i], RHS[i][j])){
+                        Table newTable = createTable(constructFD(LHS[i], RHS[i]), inputTable);
+                        LHS.erase(LHS.begin());
+                        RHS.erase(RHS.begin());
+                        vector<string> temp;
+                        temp.push_back(RHS[i][j]);
+                        inputTable.remove_columns(newTable, temp);
+                        result.push_back(inputTable);
+                        result.push_back(newTable);
+                    }
+                }
+            }
         }
     }
     // print_vector(inputTable.fundamentalDep);
