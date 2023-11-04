@@ -29,6 +29,8 @@ vector<Table> convertTo3NF(Table inputTable)
   vector<Table> convertedTables;
   if(!is2NF(inputTable))
     convertedTables = convertTo2NF(inputTable);
+  else
+    convertedTables.push_back(inputTable);
   /*general rundown?
   -for each table, look at its FDs
   -check if any of the FDs have a non-prime attribute on LHS
