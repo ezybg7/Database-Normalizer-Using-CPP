@@ -1,3 +1,4 @@
 StudentID->FirstName,LastName
-Course,Professor->CourseStart,CourseEnd,classRoom
+Course,Professor->classroom
+Course->CourseStart,CourseEnd
 Professor->ProfessorEmail

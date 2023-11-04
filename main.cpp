@@ -34,7 +34,7 @@ int main(){
       results = convertTo3NF(testTable);
       break;
     case 'B':
-      results.push_back(testTable);
+      results = convertTo3NF(testTable);
       results = convertToBCNF(results);
       break;
     // case '4':

@@ -99,7 +99,9 @@ Table createTable(string fd, Table inputTable)
       if(attribute == newAt)
       {
         for(const auto& value : values)
+        {
           newData[attribute].push_back(value);
+        }
       }
     }
   }
@@ -133,46 +135,36 @@ vector<Table> convertTo2NF(Table inputTable)
       else 
       {
         vector<string> newLHS, newRHS;
-        for(const auto& LHS : parsedLHS)
+        print_vector(primaryKey);
+        for(const auto& attribute : inputTable.attributes)
         {
-          //if one of the elements in parsedLHS is in primary key
-          if(find(primaryKey.begin(), primaryKey.end(), LHS) != primaryKey.end()) 
-          {
-            //cout << "LHS: " << LHS << " found in primary key: ";
-            //print_vector(primaryKey);
-            newLHS.push_back(LHS);
-          }
-          for(const auto& RHS : parsedRHS)
-          {
-            //check if LHS elements are actually FD to RHS elements
-            if(isFD(LHS, RHS, inputTable.data))
+          if((find(primaryKey.begin(), primaryKey.end(), attribute) != primaryKey.end()) && IsSubset(primaryKey, parsedLHS))
+          { //add all attributes that are FD to the composite key
+            newLHS.push_back(attribute);
+            for(const auto& RHS : parsedRHS)
             {
-              newRHS.push_back(RHS);
-              //cout << "pushing back " << RHS << endl;
+              if(isFD(LHS, RHS, inputTable.data))
+                newRHS.push_back(RHS);
             }
           }
-        }
-        if(newLHS.size() == 0) //if no match on LHS, all primary keys are on LHS automatically
-        {
-          newLHS = primaryKey;
-          newRHS.clear();
-          for(const auto& attribute : inputTable.attributes)
-          {
-            if(!(find(primaryKey.begin(), primaryKey.end(), attribute) != primaryKey.end()))
-            { //add all attributes that are FD to the composite key
-              bool addToFD = true;
-              for(const auto& pKey : primaryKey)
-              {
-                //NOTE: this might cause future issues since it only looks at each key at a time for composite keys
-                if(isFD(pKey, attribute, inputTable.data))
-                  addToFD = false;
-              }
-              if(addToFD)
-                newRHS.push_back(attribute);
+          else //if(!(find(primaryKey.begin(), primaryKey.end(), attribute) != primaryKey.end()))
+          { //add all attributes that are FD to the composite key
+            newLHS = primaryKey;
+            bool addToFD = true;
+            for(const auto& pKey : primaryKey)
+            {
+              //NOTE: this might cause future issues since it only looks at each key at a time for composite keys
+              if(isFD(pKey, attribute, inputTable.data))
+                addToFD = false;
             }
+            if(addToFD)
+              newRHS.push_back(attribute);
           }
         }
-        normalizedFDs.push_back(constructFD(newLHS, newRHS));
+        string newFD = constructFD(newLHS, newRHS);
+        bool exists = find(normalizedFDs.begin(),normalizedFDs.end(), newFD) != normalizedFDs.end();
+        if(!exists)
+         normalizedFDs.push_back(newFD);
       }
     }
     // cout << "NORMALIZED FDS: " << endl;
@@ -199,9 +191,7 @@ bool is2NF(Table inputTable)
     parsedRHS = parseFD(RHS, parsedRHS);
     //maybe if LHS doesnt contain primary key or a subset of primary key?
     if((parsedLHS != inputTable.keys) || !(IsSubset(inputTable.keys, parsedLHS)))
-    {
       return false;
-    }
     else
     {
       for(const auto& LHS : parsedLHS)
@@ -213,8 +203,6 @@ bool is2NF(Table inputTable)
         }
       }
     }
-    
-    
   }
   return true; //should be true, temporarily false
 }

@@ -5,20 +5,20 @@ CREATE TABLE Table5 (
 );
 
 CREATE TABLE Table6 (
-	Course VARCHAR(255),
-	CourseStart DATE,
-	CourseEnd DATE
-);
-
-CREATE TABLE Table7 (
 	StudentID INT,
 	Course VARCHAR(255),
 	Professor VARCHAR(255),
 	classRoom VARCHAR(255)
 );
 
-CREATE TABLE Table8 (
+CREATE TABLE Table7 (
 	Professor VARCHAR(255),
 	ProfessorEmail VARCHAR(255)
+);
+
+CREATE TABLE Table8 (
+	Course VARCHAR(255),
+	CourseStart DATE,
+	CourseEnd DATE
 );
 

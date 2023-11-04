@@ -96,21 +96,25 @@ vector<Table> convertToBCNF(vector<Table> inputTables) {
   // else
   //   convertedTables.push_back(inputTable);
 
-    for(const auto& inputTable : inputTables){
+    for(auto& inputTable : inputTables){
         //lhs & rhs[[0,1,2,3],[0,1,2,3]]
         //access by using i.e. lhs[i][j]
+        vector<vector<string>> LHS, RHS;
         for(const auto& fd : inputTable.fundamentalDep)
         {
-            vector<vector<string>> LHS, RHS;
+            cout << fd << endl;
             LHS.push_back(lhs_parser(fd));
             RHS.push_back(rhs_parser(fd));
-          
+            cout << "lhs size: " << LHS.size() << endl;
+            cout << "rhs size: " << RHS.size() << endl;
             //checks all functional dependencies of table
             for(size_t i = 0; i < LHS.size(); i++){
                 //checks all the RHS values and see if they exist within LHS
                 for(size_t j = 0; j < RHS[i].size(); j++){
+                    cout << "comparing " << i << " : " << j << endl;
                     //if it exists make a table based on it and push the table into result
                     if(in_vector(LHS[i], RHS[i][j])){
+                        cout << "HIIIIIIIIIIIIIIIIIII" << endl;
                         Table newTable = createTable(constructFD(LHS[i], RHS[i]), inputTable);
                         result.push_back(newTable);
 
@@ -120,7 +124,7 @@ vector<Table> convertToBCNF(vector<Table> inputTables) {
                         //the we find the position of this attribute on the LHS, which
                         //tells us which FD it is, allowing us to get the RHS of that FD
                         //which we then use to remove those attributes from then inputTable
-                        RHS[find_position(LHS,RHS[i][j])]);
+                        RHS[find_position(LHS[i],RHS[i][j])]);
 
                         result.push_back(inputTable);
 
