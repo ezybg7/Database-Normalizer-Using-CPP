@@ -18,6 +18,7 @@ vector<string> parseFD(string input, vector<string> parsed)
   return parsed;
 }
 
+//if B is a subset of A
 bool IsSubset(vector<string> A, vector<string> B)
 {
     sort(A.begin(), A.end());
@@ -47,6 +48,7 @@ bool isFD(string a, string b, unordered_map<string, vector<string>> data)
   return true;
 }
 
+//fd reconstructor for changed LHS and RHS
 string constructFD(vector<string> LHS, vector<string> RHS)
 {
   string output = "";
