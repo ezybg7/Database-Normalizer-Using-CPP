@@ -79,27 +79,13 @@ int find_position(const vector<string>& strings, const string& valueToFind) {
 vector<Table> convertToBCNF(vector<Table> inputTables) {
   
     vector<Table> result;
-    //vector<Table> test = inputTables.front();
-    // for(const auto& table : inputTables)
-    // {
-    //   if(!is3NF(table))
-    //   {
-    //     vector<Table> convertedTables = convertTo3NF(table);
-    //     for(const auto& element : convertedTables)
-    //       result.push_back(element);
-    //   }
-    //   else
-    //     result.push_back(table);
-    // }
-  // if(!is3NF(inputTable))
-  //   convertedTables = convertTo2NF(inputTable);
-  // else
-  //   convertedTables.push_back(inputTable);
+
+    //lhs & rhs[[0,1,2,3],[0,1,2,3]]
+    //access by using i.e. lhs[i][j]
+    vector<vector<string>> LHS, RHS;
 
     for(auto& inputTable : inputTables){
-        //lhs & rhs[[0,1,2,3],[0,1,2,3]]
-        //access by using i.e. lhs[i][j]
-        vector<vector<string>> LHS, RHS;
+        //getting FDs for all tables
         for(const auto& fd : inputTable.fundamentalDep)
         {
             cout << fd << endl;
@@ -128,8 +114,7 @@ vector<Table> convertToBCNF(vector<Table> inputTables) {
 
                         result.push_back(inputTable);
 
-                        LHS.erase(LHS.begin());
-                        RHS.erase(RHS.begin());
+                        RHS.erase(RHS[i].begin());
                         break;
                     }
                     else{
