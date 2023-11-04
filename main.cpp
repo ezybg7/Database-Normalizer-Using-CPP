@@ -13,7 +13,7 @@ int main(){
 
   char form, find;
 
-  cout << "Choice of the highest normal form to reach (1: 1NF, 2: 2NF, 3: 3NF, B: BCNF, 4: 4NF, 5: 5NF):" << endl;
+  cout << "Choice of the highest normal form to reach (1: 1NF, 2: 2NF, 3: 3NF, B: BCNF):" << endl;
   cin >> form;
   cout << "Find the highest normal form of the input table? (1: Yes, 2: No):" << endl;
   cin >> find;
@@ -35,12 +35,12 @@ int main(){
     case 'B':
       //results = convertToBCNF(testTable);
       break;
-    case '4':
-      //results = convertTo4NF(testTable);
-      break;
-    case '5':
-      //results = convertTo5NF(testTable);
-      break;
+    // case '4':
+    //   //results = convertTo4NF(testTable);
+    //   break;
+    // case '5':
+    //   //results = convertTo5NF(testTable);
+    //   break;
     default:
       cout << "Not a valid input" << endl;
       break;

@@ -5,24 +5,6 @@
 #include "output.h"
 #include "nf1.h"
 #include "nf2.h"
-//for checking if composite keys are FD to b, should b be a vector or a singular string?
-// bool isFD(vector<string> a, string b, unordered_map<string, vector<string>> data)
-// {
-//   for(size_t i = 0; i < data[a].size(); i++)
-//   {
-
-//     string currentB = data[b][i];
-//     for(size_t j = 0; j < data[a].size(); j++)
-//     {
-//       if((i != j)) //&& blah blah)
-//       {
-//         if(currentB != data[b][j])
-//           return false;
-//       }
-//     }
-//   }
-//   return false;
-// }
 
 vector<Table> convertTo3NF(Table inputTable)
 {
@@ -108,7 +90,19 @@ bool is3NF(Table inputTable)
     return false;
   for(const auto& fd : inputTable.fundamentalDep)
   {
-
+    string LHS = fd.substr(0, fd.find("->"));
+    string RHS = fd.substr(fd.find("->")+2, fd.size()-1);
+    vector<string> parsedLHS, parsedRHS;
+    parsedLHS = parseFD(LHS, parsedLHS);
+    parsedRHS = parseFD(RHS, parsedRHS);
+    for(const auto& LHS : parsedLHS)
+    {
+      for(const auto& RHS : parsedRHS)
+      { //probably just a simple check to see if all LHS is FD to RHS
+        if(!(isFD(LHS, RHS, inputTable.data)))
+          return false;  
+      }
+    }
   }
   return true;
 }

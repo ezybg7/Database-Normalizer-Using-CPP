@@ -198,15 +198,9 @@ bool is2NF(Table inputTable)
     parsedLHS = parseFD(LHS, parsedLHS);
     parsedRHS = parseFD(RHS, parsedRHS);
     //maybe if LHS doesnt contain primary key or a subset of primary key?
-    if(parsedLHS != inputTable.keys)
+    if((parsedLHS != inputTable.keys) || !(IsSubset(inputTable.keys, parsedLHS)))
     {
       return false;
-      // if(find(inputTable.keys.begin(), inputTable.keys.end(), LHS) != inputTable.keys.end()) 
-      // {
-
-      // }
-      // else
-      //   return false;
     }
     else
     {
