@@ -4,7 +4,7 @@
 #include "header.h"
 #include "output.h"
 #include "nf2.h"
-#include "nf3"
+#include "nf3.h"
 
 // Function to check if a set of attributes is a superkey
 bool isSuperkey(vector<string> LHS, unordered_map<string, vector<string>> data) {
@@ -90,7 +90,7 @@ vector<Table> convertToBCNF(vector<Table> inputTables) {
             for(int j = 0; j < RHS[i].size(); j++){
                 //if it exists make a table based on it and push the table into result
                 if(in_vector(LHS[i], RHS[i][j])){
-
+                    result.push_back(createTable(constructFD(LHS[i], RHS[i]), inputTable));
                 }
             }
         }
