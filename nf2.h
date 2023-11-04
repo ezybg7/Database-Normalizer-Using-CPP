@@ -32,15 +32,23 @@ bool isFD(string a, string b, unordered_map<string, vector<string>> data)
   for(size_t i = 0; i < data[a].size(); i++)
   {
     string currentA = data[a][i];
-    string currrentB = data[b][i];
+    string currentB = data[b][i];
     for(size_t j = 0; j < data[a].size(); j++)
     {
       if((i != j) && (currentA == data[a][j]))
       {
-        if(currrentB != data[b][j])
+        if(currentB != data[b][j])
         {
-          //cout << currrentB << " does not equal " << data[b][j] << " for " << currentA << endl;
+          //cout << currentB << " does not equal " << data[b][j] << " for " << currentA << endl;
           return false;
+        }
+      }
+      else if((i != j) && (currentA != data[a][j]))
+      {
+        if(currentB == data[b][j])
+        {
+          //cout << currentB << " does not equal " << data[b][j] << " for " << currentA << endl;
+          return false; 
         }
       }
     }
@@ -59,6 +67,14 @@ string constructFD(vector<string> LHS, vector<string> RHS)
   for(const auto& right : RHS)
     output += right + ",";
   output = output.substr(0, output.size()-1);
+  //cout << output << endl;
+  return output;
+}
+
+//string parameter version
+string constructFD(string LHS, string RHS)
+{
+  string output = LHS + "->" + RHS;
   //cout << output << endl;
   return output;
 }

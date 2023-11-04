@@ -26,7 +26,7 @@ void print_map(const unordered_map<string, vector<string>>& map) {
     for (const auto& [attribute, values] : map) {
         cout << setw(maxWidth) << left << attribute << ": ";
         for (const auto& value : values) {
-            cout << value << " ";
+            cout << setw(15) << value << " ";
         }
         cout << endl;
     }
