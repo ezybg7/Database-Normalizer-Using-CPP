@@ -7,9 +7,9 @@
 #include "nf3.h"
 
 // Function to check if a set of attributes is a superkey
-bool isSuperkey(vector<string> LHS, unordered_map<string, vector<string>> data) {
+// bool isSuperkey(vector<string> LHS, unordered_map<string, vector<string>> data) {
 
-}
+// }
 
 //left hand side of fd
 vector<string> lhs_parser(const string& fd) {
@@ -58,6 +58,7 @@ vector<string> rhs_parser(const string& fd) {
 }
 
 //checks if value in vector
+template <typename T>
 bool in_vector(const vector<T>& vec, const T& value) {
     return find(vec.begin(), vec.end(), value) != vec.end();
 }
@@ -76,29 +77,57 @@ int find_position(const vector<string>& strings, const string& valueToFind) {
 }
 
 vector<Table> convertToBCNF(vector<Table> inputTables) {
+  
     vector<Table> result;
+    //vector<Table> test = inputTables.front();
+    for(const auto& table : inputTables)
+    {
+      if(!is3NF(table))
+      {
+        vector<Table> convertedTables = convertTo3NF(table);
+        for(const auto& element : convertedTables)
+          result.push_back(element);
+      }
+      else
+        result.push_back(table);
+    }
+  // if(!is3NF(inputTable))
+  //   convertedTables = convertTo2NF(inputTable);
+  // else
+  //   convertedTables.push_back(inputTable);
 
     for(const auto& inputTable : inputTables){
         //lhs & rhs[[0,1,2,3],[0,1,2,3]]
         //access by using i.e. lhs[i][j]
-        vector<vector<string>> LHS, RHS;
-        LHS.push_back(lhs_parser(inputTable.fundamentalDep));
-        RHS.push_back(rhs_parser(inputTable.fundamentalDep));
-        //checks all functional dependencies of table
-        for(int i = 0; i < LHS.size(); i++){
-            //checks all the RHS values and see if they exist within LHS
-            for(int j = 0; j < RHS[i].size(); j++){
-                //if it exists make a table based on it and push the table into result
-                if(in_vector(LHS[i], RHS[i][j])){
-                    result.push_back(createTable(constructFD(LHS[i], RHS[i]), inputTable));
-                }
-            }
+        for(const auto& fd : inputTable.fundamentalDep)
+        {
+          vector<vector<string>> LHS, RHS;
+          LHS.push_back(lhs_parser(fd));
+          RHS.push_back(rhs_parser(fd));
+        
+          //checks all functional dependencies of table
+          for(size_t i = 0; i < LHS.size(); i++){
+              //checks all the RHS values and see if they exist within LHS
+              for(size_t j = 0; j < RHS[i].size(); j++){
+                  //if it exists make a table based on it and push the table into result
+                  if(in_vector(LHS[i], RHS[i][j])){
+                      Table newTable = createTable(constructFD(LHS[i], RHS[i]), inputTable);
+                      newTable.remove_columns(newTable, LHS[i]);
+                      newTable.remove_columns(newTable, RHS[i]);
+                      result.push_back(createTable(constructFD(LHS[i], RHS[i]), inputTable));
+                  }
+                  else
+                  {
+                    result.push_back(inputTable);
+                    break;
+                  }
+              }
+          }
         }
-
     }
-    print_vector(inputTable.fundamentalDep);
-    print_vector(LHS);
-    print_vector(RHS);
+    // print_vector(inputTable.fundamentalDep);
+    // print_vector(LHS);
+    // print_vector(RHS);
     return result;
 }
 
