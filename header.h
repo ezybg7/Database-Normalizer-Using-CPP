@@ -62,6 +62,8 @@ struct Table {
   Table(const vector<string>& tableAttributes, const vector<string> fd, const vector<string>& tableKeys, unordered_map<string, vector<string>> tableData, const vector<string> type)
     : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys), data(tableData), types(type)  {}
 
+
+
   //parser
   static Table parseCSV(const string& filename, const string& fileFD) {
     //FD parser
@@ -117,8 +119,6 @@ struct Table {
       dataTypes.push_back(dataType);
     }
     typeFile.close();
-    
-
 
     //creates a table with attributes
     Table table(attributes, FDinput, parsedKeys, {}, dataTypes);
@@ -168,6 +168,8 @@ struct Table {
     
     return table;
   }
+  //end of parser
+
 };
 
 #endif
