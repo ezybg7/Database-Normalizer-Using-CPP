@@ -62,7 +62,18 @@ struct Table {
   Table(const vector<string>& tableAttributes, const vector<string> fd, const vector<string>& tableKeys, unordered_map<string, vector<string>> tableData, const vector<string> type)
     : name("Table" + to_string(++tableCount)), attributes(tableAttributes), fundamentalDep(fd), keys(tableKeys), data(tableData), types(type)  {}
 
-
+  //columns remove function
+  static void remove_columns(Table& table, const vector<string>& attributesToRemove) {
+    for (const string& attribute : attributesToRemove) {
+      auto it = find(table.attributes.begin(), table.attributes.end(), attribute);
+      if (it != table.attributes.end()) {
+        size_t index = distance(table.attributes.begin(), it);
+        table.attributes.erase(table.attributes.begin() + index);
+        table.types.erase(table.types.begin() + index);
+        table.data.erase(attribute);
+      }
+    }
+  }
 
   //parser
   static Table parseCSV(const string& filename, const string& fileFD) {
