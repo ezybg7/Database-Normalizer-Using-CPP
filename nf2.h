@@ -79,6 +79,36 @@ string constructFD(string LHS, string RHS)
   return output;
 }
 
+Table createTable(string fd, Table inputTable)
+{
+  string LHS = fd.substr(0, fd.find("->"));
+  string RHS = fd.substr(fd.find("->")+2, fd.size()-1); 
+
+  vector<string> newAttributes, newFD, newKeys, newDTs;
+  unordered_map<string, vector<string>> newData;
+
+  newKeys = parseFD(LHS, newKeys);
+  newAttributes = parseFD(LHS, newAttributes);
+  newAttributes = parseFD(RHS, newAttributes);
+  newFD.push_back(fd); 
+
+  for(const auto& [attribute, values] : inputTable.data)
+  {
+    for(const auto& newAt : newAttributes)
+    {
+      if(attribute == newAt)
+      {
+        for(const auto& value : values)
+          newData[attribute].push_back(value);
+      }
+    }
+  }
+  for(const auto& attribute : newAttributes)
+    newDTs.push_back(determineDataType(newData[attribute][0]));
+  Table newTable(newAttributes, newFD, newKeys, newData, newDTs);
+  return newTable;
+}
+
 //Check if it is in 1NF before operating
 vector<Table> convertTo2NF(Table inputTable)
 {
@@ -150,33 +180,9 @@ vector<Table> convertTo2NF(Table inputTable)
     //     cout << element << " " << endl;
     for(const auto& fd : normalizedFDs)
     {
-      string LHS = fd.substr(0, fd.find("->"));
-      string RHS = fd.substr(fd.find("->")+2, fd.size()-1);
-
-      vector<string> newAttributes, newFD, newKeys, newDTs;
-      unordered_map<string, vector<string>> newData;
-
-      newKeys = parseFD(LHS, newKeys);
-      newAttributes = parseFD(LHS, newAttributes);
-      newAttributes = parseFD(RHS, newAttributes);
-      newFD.push_back(fd);
-      
-      for(const auto& [attribute, values] : inputTable.data)
-      {
-        for(const auto& newAt : newAttributes)
-        {
-          if(attribute == newAt)
-          {
-            for(const auto& value : values)
-              newData[attribute].push_back(value);
-          }
-        }
-      }
-      for(const auto& attribute : newAttributes)
-        newDTs.push_back(determineDataType(newData[attribute][0]));
-      Table newTable(newAttributes, newFD, newKeys, newData, newDTs);
+      Table newTable = createTable(fd, inputTable);
       result.push_back(newTable);
-      }
+    }
     return result;
 }
 

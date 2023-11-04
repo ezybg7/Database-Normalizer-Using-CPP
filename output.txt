@@ -1,20 +1,24 @@
-CREATE TABLE Table2 (
+CREATE TABLE Table5 (
 	StudentID INT,
 	FirstName VARCHAR(255),
 	LastName VARCHAR(255)
 );
 
-CREATE TABLE Table3 (
+CREATE TABLE Table6 (
 	Course VARCHAR(255),
 	CourseStart DATE,
 	CourseEnd DATE
 );
 
-CREATE TABLE Table4 (
+CREATE TABLE Table7 (
 	StudentID INT,
 	Course VARCHAR(255),
 	Professor VARCHAR(255),
-	ProfessorEmail VARCHAR(255),
 	classRoom VARCHAR(255)
+);
+
+CREATE TABLE Table8 (
+	Professor VARCHAR(255),
+	ProfessorEmail VARCHAR(255)
 );
 
