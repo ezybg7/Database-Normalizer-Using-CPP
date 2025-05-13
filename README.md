@@ -1,9 +1,8 @@
-# 5300project
-Project for CS-5300 Database
-GROUP :
-Yannis Fu
-Everett Yan
-Tony Feng
+# Project for the class : CS5300 (Database Systems)
+
+GROUP :<br></br>
+Yannis Fu<br></br>
+Everett Yan<br></br>
 
 # DISCLAIMER
 Only 1NF - BCNF are currently working at the time of submission
@@ -18,5 +17,7 @@ The Keys input is inside of the console, there should be NO spaces between each 
 I.E. "StudentID,Course"
 
 # HOW TO RUN
+```bash
 g++ -std=c++17 main.cpp -o main
 ./main
+```
